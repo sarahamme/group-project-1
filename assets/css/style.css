@@ -1,0 +1,17 @@
+nav {
+    background:rgba(white, white, #ffffff, .8);
+    font-family: 'Amatic SC', cursive;
+    background: #ffffff;
+    
+}
+.navbar-brand {
+    font-size: 50px;
+}
+.nav-link{
+    font-size: 30px;
+    
+}
+.nav-link:hover{
+    background-color: #03646d;
+    color: white;
+}
