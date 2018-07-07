@@ -4,19 +4,18 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     <title>Hike It Up</title>
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-   <!-- CSS & Bootstrap -->
-=======
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+        crossorigin="anonymous">
+    <!-- CSS & Bootstrap -->
+
     <title>Hike It Up - A Collective Hiker's Community</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
         crossorigin="anonymous">
 
->>>>>>> 9452eac3d10159cb8f04def893c57ce0ce0aa789
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CDN-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -64,86 +63,73 @@
     </nav>
     <!-- End nav bar -->
 
-<<<<<<< HEAD
+
 </body>
-<script src="assets/javascript/javascript.js"></script>
-=======
-    <title>Hike It Up - A Collective Hiker's Community</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
-</head>
-<body>
-=======
->>>>>>> 9452eac3d10159cb8f04def893c57ce0ce0aa789
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <img src="assets/images/HikeItUp_HeaderImage.jpg" alt="Hike It Up" class="img-responsive" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <img src="assets/images/HikeItUp_HeaderImage.jpg" alt="Hike It Up" class="img-responsive" />
+        </div>
+    </div>
+</div>
+
+<div class="row form">
+    <h2>Search For Hikes In Your City</h2>
+    <div class="col formCol">
+        <form id="hike-form">
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" placeholder="Enter City Name" required>
+            </div>
+            <button type="submit" class="btn btn-outline-dark btn-lg" id="submit-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div class="row weather">
+    <div class="col">
+        <div class="city"></div>
+        <div class="wind"></div>
+        <div class="humidity"></div>
+        <div class="temp"></div>
+    </div>
+</div>
+
+<div class="row trailInfo">
+    <div class="col">
+    </div>
+</div>
+
+<div class="modal fade" id="trailModal" tabindex="-1" role="dialog" aria-labelledby="tailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="trailModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="trailModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-
-    <div class="row form">
-        <h2>Search For Hikes In Your City</h2>
-        <div class="col formCol">
-            <form id="hike-form">
-                <div class="form-group">
-                    <label for="city">City</label>
-                    <input type="text" class="form-control" id="city" placeholder="Enter City Name" required>
-                </div>
-                <button type="submit" class="btn btn-outline-dark btn-lg" id="submit-button">Submit</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="row weather">
-        <div class="col">
-            <div class="city"></div>
-            <div class="wind"></div>
-            <div class="humidity"></div>
-            <div class="temp"></div>
-        </div>
-    </div>
-
-    <div class="row trailInfo">
-        <div class="col">
-        </div>
-    </div>
-
-    <div class="modal fade" id="trailModal" tabindex="-1" role="dialog" aria-labelledby="tailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="trailModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="trailModalBody">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 
 
 
-    <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- our javascript -->
-    <script src="assets/javaScript/javascript.js" type="text/javascript"></script>
-    <!-- bootstrap .js -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- our javascript -->
+<script src="assets/javaScript/javascript.js" type="text/javascript"></script>
+<!-- bootstrap .js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 
 
 </body>
-<<<<<<< HEAD
->>>>>>> 627e724cb5cda143313fb8bc16b437221b105a52
-=======
 
->>>>>>> 9452eac3d10159cb8f04def893c57ce0ce0aa789
 </html>
