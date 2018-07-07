@@ -1,4 +1,21 @@
 
+<<<<<<< HEAD
+   // hides nav bar until you start to scroll
+    var $nav = $('.navbar');
+    $nav.hide();
+//fade in .navbar
+$(function () {
+    $(window).scroll(function () {
+        // set distance user needs to scroll before we start fadeIn
+        if ($(this).scrollTop() > 100) { //For dynamic effect use $nav.height() instead of '100'
+            $nav.fadeIn();
+        } else {
+            $nav.fadeOut();
+        }
+    });
+});
+ 
+=======
 $(document).ready(function () {
 
 
@@ -139,3 +156,4 @@ $(document).ready(function () {
   });
 
 });
+>>>>>>> 9452eac3d10159cb8f04def893c57ce0ce0aa789
