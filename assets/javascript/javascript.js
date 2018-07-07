@@ -2,20 +2,20 @@
 
 
 $(document).ready(function () {
-  // hides nav bar until you start to scroll
-  var $nav = $('.navbar');
-  $nav.hide();
-  //fade in .navbar
-  $(function () {
-    $(window).scroll(function () {
-      // set distance user needs to scroll before we start fadeIn
-      if ($(this).scrollTop() > 100) { //For dynamic effect use $nav.height() instead of '100'
-        $nav.fadeIn();
-      } else {
-        $nav.fadeOut();
-      }
-    });
-  });
+  // // hides nav bar until you start to scroll
+  // var $nav = $('.navbar');
+  // $nav.hide();
+  // //fade in .navbar
+  // $(function () {
+  //   $(window).scroll(function () {
+  //     // set distance user needs to scroll before we start fadeIn
+  //     if ($(this).scrollTop() > 100) { //For dynamic effect use $nav.height() instead of '100'
+  //       $nav.fadeIn();
+  //     } else {
+  //       $nav.fadeOut();
+  //     }
+  //   });
+  // });
 
   //open weather api function
   function searchCityWeather() {
@@ -39,7 +39,7 @@ $(document).ready(function () {
         //round to whole number
         let fTempRound = Math.round(fTemp);
         // Transfer content to HTML
-        $(".city").html("<h1>" + response.name + " Weather Details</h1>");
+        $(".city").html("<h2>" + response.name + " Weather Details</h2>");
         $(".wind").text("Summary: " + response.weather[0].description);
         $(".humidity").text("Humidity: " + response.main.humidity);
         $(".temp").text("Temperature (F) " + fTempRound);
@@ -132,19 +132,43 @@ $(document).ready(function () {
   //event handler for selecting a trail
   $(document.body).on("click", ".trailInfoDiv", function () {
     //take to new screen with full info on trail and link to map
-    //whicher trail is clicked find its modal
     let myModal = $('.modal');
-
+    //which ever trail is clicked find its trail data
     let currentTrail = $(this).data('trail');
 
     $('#trailModalLabel').text(currentTrail.name);
     $('#trailModalBody').html(`
-      <p>${currentTrail.summary}</p>
-      <p>Stars: ${currentTrail.stars}</p>
-      <p>Trail Length (miles): ${currentTrail.length}</p>
-      <p>Condition Status: ${currentTrail.conditionStatus}</p>
-      <p>Condition Details: ${currentTrail.conditionDetails}</p>
-      <img src="${currentTrail.imgMedium}">
+    <div role="tabpanel">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active nav-item"><a class="nav-link" href="#trailTab" aria-controls="trailTab" role="tab" data-toggle="tab">Trail Information</a>
+                        </li>
+
+                        <li role="presentation" class="nav-item"><a class="nav-link" href="#leaveReviewTab" aria-controls="leaveReviewTab" role="tab" data-toggle="tab">Leave A Review</a>
+                        </li>
+
+                        <li role="presentation" class="nav-item"><a class="nav-link" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
+                        </li>
+                        
+                        <li role="presentation" class="nav-item"><a class="nav-link" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Navigate to ${currentTrail.name} </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="trailTab">    
+                        <p>${currentTrail.summary}</p>
+                        <p>Stars: ${currentTrail.stars}</p>
+                        
+                        <p>Trail Length (miles): ${currentTrail.length}</p>
+                        <p>Condition Status: ${currentTrail.conditionStatus}</p>
+                        <p>Condition Details: ${currentTrail.conditionDetails}</p>
+                        <img class="trailImg" src="${currentTrail.imgMedium}"></div>
+                        <div role="tabpanel" class="tab-pane" id="leaveReviewTab">we will add a place to leave reviews here</div>
+                        <div role="tabpanel" class="tab-pane" id="readReviewsTab">we will add a place to read reviews here</div>
+                        <div role="tabpanel" class="tab-pane" id="navigateTab">we will add a place to navigate here</div>
+                    </div>
+                </div>
+            </div>
     `);
 
     //show its modal
@@ -152,6 +176,29 @@ $(document).ready(function () {
     console.log("click working 1");
 
   });
+
+  /* <button type="button" class="btn btn-outline-primary readReviewBtn">Read Reviews</button>
+        <button type="button" class="btn btn-outline-primary leaveReviewBtn">Leave Review</button> */
+  // <button type="button" class="btn btn-outline-primary navigateBtn">Navigate to ${currentTrail.name}</button>
+
+
+  // //on click event for read review
+  // $(document.body).on("click", ".readReviewBtn", function () {
+  //   console.log("clck is working on read review btn")
+
+  // });
+
+  // //on click event for leave review
+  // $(document.body).on("click", ".leaveReviewBtn", function () {
+  //   console.log("clck is working on leave review btn")
+
+  // });
+
+  // // on click event for map
+  // $(document.body).on("click", ".navigateBtn", function () {
+  //   console.log("clck is working on navigate btn")
+
+  // });
 
 });
 
