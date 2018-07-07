@@ -1,3 +1,64 @@
+body {
+    overflow-x: hidden;
+}
+
+.navbar-brand {
+    font-size: 50px;
+    font-family: 'Amatic SC', cursive;
+    margin-left: 2%;
+    float: right;
+}
+
+.menuItems {
+    float: left;
+}
+
+.nav-link{
+    font-size: 30px;
+}
+.nav-link:hover{
+    background-color: #FFD04B;
+    color: white;
+}
+
+h1 {
+    font-size: 48px;
+    color: #333333;
+}
+
+h4 {
+    color: #a1a8b3;
+}
+
+.formCol {
+    padding: 0px;
+    margin: 0;
+}
+
+.img-responsive {
+    border-radius: 2%;
+}
+#submit-button{
+    background-color: #FFD04B;
+    color: white;
+    border: #ffffff;
+}
+
+#cityState {
+    font-size: 20px;
+}
+
+.weather{
+    margin-top: 5%;
+}
+
+.city {
+    text-align: center;
+}
+
+.weatherDetails {
+   text-align: center;
+}
 
 .trailInfoDiv{
     margin: 40px;
@@ -14,55 +75,3 @@
 .trailInfo{
     margin-top: 50px;
 }
-
-.weather{
-    margin-top: 40px;
-}
-nav {
-    background:rgba(white, white, #ffffff, .8);
-    font-family: 'Amatic SC', cursive;
-    background: #ffffff;
-    
-}
-.navbar-brand {
-    font-size: 50px;
-}
-.nav-link{
-    font-size: 30px;
-    
-}
-.nav-link:hover{
-    background-color: 	#FFD04B;
-    color: white;
-}
-
-.mainSection {
-    margin-top: 20%;
-    background-color: rgba(255, 208, 75, .7);
-    border-radius: 2%;
-    color: white;
-}
-
-h4 {
-    color: lightslategray;
-}
-
-.img-responsive {
-    border-radius: 2%;
-}
-#submit-button{
-    background-color: 	#FFD04B;
-    color: white;
-    border: #ffffff;
-}
-
-.city {
-    text-align: center;
-}
-
-.weatherDetails {
-   text-align: center;
-}
-
-
-
