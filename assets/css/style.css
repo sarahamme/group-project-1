@@ -1,3 +1,23 @@
+
+.trailInfoDiv{
+    margin: 40px;
+
+}
+
+.trailInfoDiv:hover{
+    box-shadow: 10px 10px 5px grey;
+    padding: 5px;
+    cursor: pointer;
+
+}
+
+.trailInfo{
+    margin-top: 50px;
+}
+
+.weather{
+    margin-top: 40px;
+}
 nav {
     background:rgba(white, white, #ffffff, .8);
     font-family: 'Amatic SC', cursive;
@@ -15,3 +35,4 @@ nav {
     background-color: #03646d;
     color: white;
 }
+
