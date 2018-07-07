@@ -32,7 +32,37 @@ nav {
     
 }
 .nav-link:hover{
-    background-color: #03646d;
+    background-color: 	#FFD04B;
     color: white;
 }
+
+.mainSection {
+    margin-top: 20%;
+    background-color: rgba(255, 208, 75, .7);
+    border-radius: 2%;
+    color: white;
+}
+
+h4 {
+    color: lightslategray;
+}
+
+.img-responsive {
+    border-radius: 2%;
+}
+#submit-button{
+    background-color: 	#FFD04B;
+    color: white;
+    border: #ffffff;
+}
+
+.city {
+    text-align: center;
+}
+
+.weatherDetails {
+   text-align: center;
+}
+
+
 
