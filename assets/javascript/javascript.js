@@ -96,7 +96,7 @@ $(document).ready(function () {
     let cityName = $("#city").val().trim()
     // Here we are building the URL we need to query the database
     let geocodeAPIKey = "5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK";
-    let geocodeQueryURL = "http://www.mapquestapi.com/geocoding/v1/address?key=" + geocodeAPIKey + "&location=" + cityName;
+    let geocodeQueryURL = "https://www.mapquestapi.com/geocoding/v1/address?key=" + geocodeAPIKey + "&location=" + cityName;
 
     // Here we run our AJAX call to the mapquest API
     $.ajax({

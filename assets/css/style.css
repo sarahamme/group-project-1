@@ -44,8 +44,12 @@ h4 {
     border: #ffffff;
 }
 
-#cityState {
+#city {
     font-size: 20px;
+}
+
+#yellowFont {
+    color: #FFD04B;
 }
 
 .weather{
