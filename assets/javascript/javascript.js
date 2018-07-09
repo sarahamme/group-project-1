@@ -2,20 +2,41 @@
 
 
 $(document).ready(function () {
-  // // hides nav bar until you start to scroll
-  // var $nav = $('.navbar');
-  // $nav.hide();
-  // //fade in .navbar
-  // $(function () {
-  //   $(window).scroll(function () {
-  //     // set distance user needs to scroll before we start fadeIn
-  //     if ($(this).scrollTop() > 100) { //For dynamic effect use $nav.height() instead of '100'
-  //       $nav.fadeIn();
-  //     } else {
-  //       $nav.fadeOut();
-  //     }
-  //   });
-  // });
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAnkB5LXjeLkSHzKilnnDUwbT3ouMgyP14",
+    authDomain: "group-project-1-aa136.firebaseapp.com",
+    databaseURL: "https://group-project-1-aa136.firebaseio.com",
+    projectId: "group-project-1-aa136",
+    storageBucket: "group-project-1-aa136.appspot.com",
+    messagingSenderId: "495847653658"
+  };
+  firebase.initializeApp(config);
+
+  let database = firebase.database();
+
+  // Initial Values
+  // let userStarRating = "";
+  // let userReview = "";
+
+  // Capture Button Click review submit btn
+  $(document.body).on("click", "#reviewSubmitBtn", function (event) {
+    // Don't refresh the page
+    event.preventDefault();
+    console.log("Review Form submit")
+    // logic for storing and retrieving the reveiw
+    // userStarRating = $("#userStarRating").val().trim();
+    let userReview = $("#userReview").val().trim();
+
+    database.ref().push({
+      // userStarRating: userStarRating,
+      userReview: userReview,
+    });
+    $("#userReview").val("");
+  });
+
+
 
   //open weather api function
   function searchCityWeather() {
@@ -159,13 +180,13 @@ $(document).ready(function () {
                         <br/>
                         <p>${currentTrail.summary}</p>
                         <p>Stars: ${currentTrail.stars}</p>
-                        
                         <p>Trail Length: ${currentTrail.length} miles</p>
                         <p>Condition Status: ${currentTrail.conditionStatus}</p>
                         <p>Condition Details: ${currentTrail.conditionDetails}</p>
                         <img class="trailImg" src="${currentTrail.imgMedium}"></div>
                         <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
-                          <div class="col-md-12 ratingsReview">
+                       
+                        <div class="col-md-12 ratingsReview">
                             <h4>Rate ${currentTrail.name}</h4>
                             <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
                             <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
@@ -175,23 +196,54 @@ $(document).ready(function () {
                             <br/><br/>
                             <form>
                               <div class="form-group">
-                                <textarea class="form-control" id="reviewFormInput" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3"></textarea>
+                                <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3"></textarea>
                                 <br/>
-                                <button type="submit" class="btn btn-md submit-review">Submit</button>
+                                <button type="button" id="reviewSubmitBtn" class="btn btn-md submit-review">Submit</button>
                               </div>
                             </form>
                           </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="readReviewsTab">we will add a place to read reviews here</div>
+                        
+                        <div role="tabpanel" class="tab-pane" id="readReviewsTab">
+                        <div class="col-md-12 savedRatingsReview">
+                            <h4>Rating For ${currentTrail.name}</h4>
+                            <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
+                            <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
+                            <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
+                            <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
+                            <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+                            <br/><br/>
+                            <form>
+                              <div class="form-group">
+                                <p class="savedReviewTitle">Thoughts on ${currentTrail.name}...</p>
+                                <p id="savedReview"></p>
+                        </div>
+                        </div>
+                        </div>
                         <div role="tabpanel" class="tab-pane" id="navigateTab">we will add a place to navigate here</div>
                     </div>
-                </div>
+               
             </div>
     `);
-
     //show its modal
     myModal.modal('show');
     console.log("click working 1");
+
+    // Firebase watcher + initial loader 
+    database.ref().on("child_added", function (snapshot) {
+
+      // Log everything that's coming out of snapshot
+      console.log(snapshot.val());
+
+      const reviewDiv = `<div>${snapshot.val().userReview}</div>`;
+      // // Change the HTML to reflect
+      $("#savedReview").append(reviewDiv);
+      // $("#email-display").text(snapshot.val().userStarRating);
+
+      // Handle the errors
+    }, function (errorObject) {
+      console.log("Errors handled: " + errorObject.code);
+    });
 
   });
 
