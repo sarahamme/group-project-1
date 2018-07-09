@@ -2,20 +2,62 @@
 
 
 $(document).ready(function () {
-  // // hides nav bar until you start to scroll
-  // var $nav = $('.navbar');
-  // $nav.hide();
-  // //fade in .navbar
-  // $(function () {
-  //   $(window).scroll(function () {
-  //     // set distance user needs to scroll before we start fadeIn
-  //     if ($(this).scrollTop() > 100) { //For dynamic effect use $nav.height() instead of '100'
-  //       $nav.fadeIn();
-  //     } else {
-  //       $nav.fadeOut();
-  //     }
-  //   });
-  // });
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAnkB5LXjeLkSHzKilnnDUwbT3ouMgyP14",
+    authDomain: "group-project-1-aa136.firebaseapp.com",
+    databaseURL: "https://group-project-1-aa136.firebaseio.com",
+    projectId: "group-project-1-aa136",
+    storageBucket: "group-project-1-aa136.appspot.com",
+    messagingSenderId: "495847653658"
+  };
+  firebase.initializeApp(config);
+
+  let database = firebase.database();
+
+  // Initial Values
+  let userName = "";
+  let userStarRating = "";
+  let userReview = "";
+
+  // Capture Button Click review submit btn
+  $(document.body).on("click", "#reviewSubmitBtn", function (event) {
+    // Don't refresh the page
+    event.preventDefault();
+    console.log("Review Form submit")
+    // logic for storing and retrieving the reveiw
+    userName = $("#userName").val().trim();
+    userStarRating = $("#starRating").val().trim();
+    userReview = $("#review").val().trim();
+
+    database.ref().set({
+      userName: userName,
+      userStarRating: userStarRating,
+      userReview: userReview,
+    });
+
+  });
+
+  // Firebase watcher + initial loader 
+  database.ref().on("value", function (snapshot) {
+
+    // Log everything that's coming out of snapshot
+    console.log(snapshot.val());
+    console.log(snapshot.val().userName);
+
+
+    // // Change the HTML to reflect
+    // $("#name-display").text(snapshot.val().userName);
+    // $("#email-display").text(snapshot.val().userStarRating);
+    // $("#age-display").text(snapshot.val().userReview);
+
+    // Handle the errors
+  }, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
+
+
 
   //open weather api function
   function searchCityWeather() {
@@ -139,17 +181,17 @@ $(document).ready(function () {
     $('#trailModalLabel').text(currentTrail.name);
     $('#trailModalBody').html(`
     <div role="tabpanel">
-                    <ul class="nav nav-tabs" role="tablist">
+                    <ul class="nav nav-tabs nav-justified" role="tablist">
                         <li role="presentation" class="active nav-item"><a class="nav-link" href="#trailTab" aria-controls="trailTab" role="tab" data-toggle="tab">Trail Information</a>
                         </li>
 
-                        <li role="presentation" class="nav-item"><a class="nav-link" href="#leaveReviewTab" aria-controls="leaveReviewTab" role="tab" data-toggle="tab">Leave A Review</a>
+                        <li role="presentation" class="nav-item"><a class="nav-link" href="#leaveReviewTab" aria-controls="leaveReviewTab" role="tab" data-toggle="tab">Write A Review</a>
                         </li>
 
-                        <li role="presentation" class="nav-item"><a class="nav-link" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
+                        <li role="presentation" class="nav-item"><a class="nav-link" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Reviews</a>
                         </li>
                         
-                        <li role="presentation" class="nav-item"><a class="nav-link" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Navigate to ${currentTrail.name} </a>
+                        <li role="presentation" class="nav-item"><a class="nav-link" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Navigate</a>
                         </li>
 
                     </ul>
@@ -163,7 +205,27 @@ $(document).ready(function () {
                         <p>Condition Status: ${currentTrail.conditionStatus}</p>
                         <p>Condition Details: ${currentTrail.conditionDetails}</p>
                         <img class="trailImg" src="${currentTrail.imgMedium}"></div>
-                        <div role="tabpanel" class="tab-pane" id="leaveReviewTab">we will add a place to leave reviews here</div>
+                        <div role="tabpanel" class="tab-pane" id="leaveReviewTab"> <div class="form-group">
+                       
+                        <form id="reviewForm">
+                        <label for="userName">Name</label>
+                        <input id="userName" class="form-control" type="text" placeholder="User Name">
+                        <label for="starRating">Star Rating</label>
+                        <select class="form-control" id="starRating">
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                      <label for="review">Review</label>
+                      <textarea class="form-control" id="review" rows="3"></textarea>
+                      <button type="submit" id="reviewSubmitBtn" class="btn btn-primary mb-2">Submit</button>
+                    </div>
+                  </form>
+                      </div>
                         <div role="tabpanel" class="tab-pane" id="readReviewsTab">we will add a place to read reviews here</div>
                         <div role="tabpanel" class="tab-pane" id="navigateTab">we will add a place to navigate here</div>
                     </div>
