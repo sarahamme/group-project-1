@@ -103,3 +103,10 @@ h1 {
     color: white;
     border: #ffffff;
 }
+
+/* Css for about page  */
+.about-photo{
+    width: 350px;
+    height: 450px;
+    border-radius: 2%;
+}

@@ -270,5 +270,14 @@ $(document).ready(function () {
 
   // });
 
+//slide in functions 
+
+$(".about").onLoad(function(){
+  $(".about").slide({left: '250px'});
 });
+
+
+
+});
+
 
