@@ -41,7 +41,7 @@ $(document).ready(function () {
         // Transfer content to HTML
         $(".city").html("<h2>" + response.name + " Weather Details</h2>");
         $(".wind").text("Summary: " + response.weather[0].description);
-        $(".humidity").text("Humidity: " + response.main.humidity);
+        $(".humidity").text("Humidity: " + response.main.humidity + "%");
         $(".temp").text("Temperature (F) " + fTempRound);
       });
   };
@@ -65,10 +65,10 @@ $(document).ready(function () {
         //loop through response to create a div for each trail
         for (let i = 0; i < response.trails.length; i++) {
           let currentTrail = response.trails[i];
-          let trailInfoDiv = $("<div class='trailInfoDiv'>");
+          let trailInfoDiv = $("<div class='col-md-6 col-sm-12 trailInfoDiv'>");
 
           let name = currentTrail.name
-          let pOne = $("<p>").text(name);
+          let pOne = $("<h2>").text(name);
           trailInfoDiv.append(pOne);
 
           let summary = currentTrail.summary
@@ -76,7 +76,7 @@ $(document).ready(function () {
           trailInfoDiv.append(pTwo);
 
           let img = currentTrail.imgSmallMed
-          let pFive = $("<img>").attr({ src: img });
+          let pFive = $("<img class='trailImg'>").attr({ src: img });
           trailInfoDiv.append(pFive);
 
           // Store current trail data in the trailInfoDiv
@@ -96,7 +96,7 @@ $(document).ready(function () {
     let cityName = $("#city").val().trim()
     // Here we are building the URL we need to query the database
     let geocodeAPIKey = "5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK";
-    let geocodeQueryURL = "http://www.mapquestapi.com/geocoding/v1/address?key=" + geocodeAPIKey + "&location=" + cityName;
+    let geocodeQueryURL = "https://www.mapquestapi.com/geocoding/v1/address?key=" + geocodeAPIKey + "&location=" + cityName;
 
     // Here we run our AJAX call to the mapquest API
     $.ajax({
@@ -140,30 +140,48 @@ $(document).ready(function () {
     $('#trailModalBody').html(`
     <div role="tabpanel">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active nav-item"><a class="nav-link" href="#trailTab" aria-controls="trailTab" role="tab" data-toggle="tab">Trail Information</a>
+                        <li role="presentation" class="active nav-item"><a class="nav-link modalTab" href="#trailTab" aria-controls="trailTab" role="tab" data-toggle="tab">Trail Information</a>
                         </li>
 
-                        <li role="presentation" class="nav-item"><a class="nav-link" href="#leaveReviewTab" aria-controls="leaveReviewTab" role="tab" data-toggle="tab">Leave A Review</a>
+                        <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#leaveReviewTab" aria-controls="leaveReviewTab" role="tab" data-toggle="tab">Leave A Review</a>
                         </li>
 
-                        <li role="presentation" class="nav-item"><a class="nav-link" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
+                        <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
                         </li>
                         
-                        <li role="presentation" class="nav-item"><a class="nav-link" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Navigate to ${currentTrail.name} </a>
+                        <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Plan Your Trip</a>
                         </li>
 
                     </ul>
 
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="trailTab">    
+                        <br/>
                         <p>${currentTrail.summary}</p>
                         <p>Stars: ${currentTrail.stars}</p>
                         
-                        <p>Trail Length (miles): ${currentTrail.length}</p>
+                        <p>Trail Length: ${currentTrail.length} miles</p>
                         <p>Condition Status: ${currentTrail.conditionStatus}</p>
                         <p>Condition Details: ${currentTrail.conditionDetails}</p>
                         <img class="trailImg" src="${currentTrail.imgMedium}"></div>
-                        <div role="tabpanel" class="tab-pane" id="leaveReviewTab">we will add a place to leave reviews here</div>
+                        <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
+                          <div class="col-md-12 ratingsReview">
+                            <h4>Rate ${currentTrail.name}</h4>
+                            <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
+                            <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
+                            <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
+                            <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
+                            <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+                            <br/><br/>
+                            <form>
+                              <div class="form-group">
+                                <textarea class="form-control" id="reviewFormInput" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3"></textarea>
+                                <br/>
+                                <button type="submit" class="btn btn-md submit-review">Submit</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
                         <div role="tabpanel" class="tab-pane" id="readReviewsTab">we will add a place to read reviews here</div>
                         <div role="tabpanel" class="tab-pane" id="navigateTab">we will add a place to navigate here</div>
                     </div>

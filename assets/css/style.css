@@ -1,59 +1,60 @@
-
-.trailInfoDiv{
-    margin: 40px;
-
+body {
+    overflow-x: hidden;
 }
 
-.trailInfoDiv:hover{
-    box-shadow: 10px 10px 5px grey;
-    padding: 5px;
-    cursor: pointer;
-
-}
-
-.trailInfo{
-    margin-top: 50px;
-}
-
-.weather{
-    margin-top: 40px;
-}
-nav {
-    background:rgba(white, white, #ffffff, .8);
-    font-family: 'Amatic SC', cursive;
-    background: #ffffff;
-    
-}
 .navbar-brand {
     font-size: 50px;
+    font-family: 'Amatic SC', cursive;
+    margin-left: 2%;
+    float: right;
 }
+
+.menuItems {
+    float: left;
+}
+
 .nav-link{
     font-size: 30px;
-    
 }
 .nav-link:hover{
-    background-color: 	#FFD04B;
+    background-color: #FFD04B;
     color: white;
 }
 
-.mainSection {
-    margin-top: 20%;
-    background-color: rgba(255, 208, 75, .7);
-    border-radius: 2%;
-    color: white;
+h1 {
+    font-size: 48px;
+    color: #333333;
 }
 
-h4 {
-    color: lightslategray;
+.subHeader {
+    color: #a1a8b3;
+}
+
+.formCol {
+    padding: 0px;
+    margin: 0;
 }
 
 .img-responsive {
     border-radius: 2%;
 }
-#submit-button{
-    background-color: 	#FFD04B;
+
+.btn {
+    background-color: #FFD04B;
     color: white;
     border: #ffffff;
+}
+
+#city {
+    font-size: 20px;
+}
+
+#yellowFont {
+    color: #FFD04B;
+}
+
+.weather{
+    margin-top: 5%;
 }
 
 .city {
@@ -64,5 +65,41 @@ h4 {
    text-align: center;
 }
 
+.trailInfoDiv{
+    margin: 40px;
 
+}
 
+.trailInfoDiv:hover{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 5px;
+    cursor: pointer;
+
+}
+
+.trailInfo{
+    margin-top: 50px;
+}
+
+.trailImg {
+    height: 300px;
+    width: 300px;
+}
+
+.modalTab {
+    font-size: 20px;
+    color: black;
+}
+
+.fa-star {
+    color: transparent;
+   -webkit-text-stroke-width: 2px;
+   -webkit-text-stroke-color: #FFD04B;
+   line-height: 200%;
+}
+
+.submit-review {
+    background-color: #FFD04B;
+    color: white;
+    border: #ffffff;
+}
