@@ -26,7 +26,7 @@ h1 {
     color: #333333;
 }
 
-h4 {
+.subHeader {
     color: #a1a8b3;
 }
 
@@ -38,7 +38,8 @@ h4 {
 .img-responsive {
     border-radius: 2%;
 }
-#submit-button{
+
+.btn {
     background-color: #FFD04B;
     color: white;
     border: #ffffff;
@@ -70,7 +71,7 @@ h4 {
 }
 
 .trailInfoDiv:hover{
-    box-shadow: 10px 10px 5px grey;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 5px;
     cursor: pointer;
 
@@ -78,4 +79,27 @@ h4 {
 
 .trailInfo{
     margin-top: 50px;
+}
+
+.trailImg {
+    height: 300px;
+    width: 300px;
+}
+
+.modalTab {
+    font-size: 20px;
+    color: black;
+}
+
+.fa-star {
+    color: transparent;
+   -webkit-text-stroke-width: 2px;
+   -webkit-text-stroke-color: #FFD04B;
+   line-height: 200%;
+}
+
+.submit-review {
+    background-color: #FFD04B;
+    color: white;
+    border: #ffffff;
 }
