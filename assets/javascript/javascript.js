@@ -270,5 +270,14 @@ $(document).ready(function () {
 
   // });
 
+<<<<<<< Updated upstream
+=======
+//slide in functions 
+
+
+
+
+
+>>>>>>> Stashed changes
 });
 
