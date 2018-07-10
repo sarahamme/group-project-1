@@ -16,9 +16,6 @@ $(document).ready(function () {
 
   let database = firebase.database();
 
-  // Initial Values
-  // let userStarRating = "";
-  // let userReview = "";
 
   // Capture Button Click review submit btn
   $(document.body).on("click", "#reviewSubmitBtn", function (event) {
@@ -68,7 +65,7 @@ $(document).ready(function () {
   };
 
   //hiking project api function
-  //we will be grabbing the lat and lon from the mapquest api
+  //we will be grabbing the lat and lon from the mapquest api to use here
   function searchCityTrails(lat, lon) {
     // Here we are building the URL we need to query the database
     let hikeAPIKey = "200303527-f280c2c52a126cb1818bd9a9a56661fd";
@@ -105,10 +102,7 @@ $(document).ready(function () {
           trailInfoDiv.data('trail', currentTrail);
 
           trailInfo.append(trailInfoDiv);
-
-
         }
-
       });
   }
 
@@ -135,62 +129,38 @@ $(document).ready(function () {
       });
   };
 
-
-  // // mapquest api function directions
-  // function directions(lat, lon) {
-  //   let start = $("#startInput").val().trim();
-  //   let end = lat, lon
-  //   // Here we are building the URL we need to query the database
-  //   let directionsAPIKey = "5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK";
-  //   let directionsQueryURL = "https://www.mapquestapi.com/directions/v2/route?key=" + directionsAPIKey + "&from=" + start + "&to=" + end + "&outFormat=json&ambiguities=ignore&routeType=fastest&doReverseGeocode=false&enhancedNarrative=false&avoidTimedConditions=false";
-
-  //   // Here we run our AJAX call to the mapquest API
-  //   $.ajax({
-  //     url: directionsQueryURL,
-  //     method: "GET"
-  //   })
-  //     // We store all of the retrieved data inside of an object called "response"
-  //     .then(function (response) {
-  //       console.log("direction function working?" + response.distance)
-  //       let map = L.mapquest.map('map', {
-  //         center: [40.7128, -74.0059],
-  //         layers: L.mapquest.tileLayer('map'),
-  //         zoom: 13
-  //       });
-  //       $("#map").append(map);
-  //     });
-  //   geocode();
-  // };
-
-
-
-
+  //function using mapQuest.js no need for ajax call
   function directions() {
     L.mapquest.key = '5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK';
 
-    var map = L.mapquest.map('map', {
+    let map = L.mapquest.map('map', {
       center: [40.7128, -74.0059],
       layers: L.mapquest.tileLayer('map'),
-      zoom: 13
+      zoom: 100,
     });
-    //need to get these inputs in //   let start = $("#startInput").val().trim();
+    //need to get these inputs in   let start = $("#startInput").val().trim();
     //   let end = lat, lon
     L.mapquest.directions().route({
-      start: "9400 east iliff ave, denver, co 80231",
-      end: "18 laurel ave, binghamton, ny 13905",
+      start: '350 5th Ave, New York, NY 10118',
+      end: 'One Liberty Plaza, New York, NY 10006'
     });
   }
 
-  function submitStartCity() {
-    //event handler for submit start point input
-    $("#directionsSubmitBtn").on("click", function (event) {
-      //prevent form from submiting
-      event.preventDefault();
-      let start = $("#startInput").val().trim();
-      console.log("submit start city" + start);
-      console.log("start submit clicking")
-    });
-  };
+
+
+
+
+  // function submitStartCity() {
+  //   //event handler for submit start point input
+  //   $("#directionsSubmitBtn").on("click", function (event) {
+  //     //prevent form from submiting
+  //     event.preventDefault();
+  //     let start = $("#startInput").val().trim();
+  //     let end = lat, lon
+  //     console.log("submit start city" + start);
+  //     console.log("start submit clicking")
+  //   });
+  // };
 
   //event handler for submit city input
   $("#submit-button").on("click", function (event) {
@@ -286,30 +256,22 @@ $(document).ready(function () {
                                 <button type="button" id="directionsSubmitBtn" class="btn btn-md submit-review">Submit</button>
                               </div>
                             </form>
-                             
-                            <div id="map" style="width: 100%; height: 530px;"></div>
-                          
-                            </div>
+                            <div id="map" style="width: 100%; height: 300px;"></div>
+                          </div>
                     </div>
-               
             </div>
     `);
-    //show its modal
+    //show modal
     myModal.modal('show');
-    console.log("click working 1");
 
+    //had to move firebase loader inside div click because of modal
     // Firebase watcher + initial loader 
     database.ref().on("child_added", function (snapshot) {
-
       // Log everything that's coming out of snapshot
       console.log(snapshot.val());
-
       const reviewDiv = `<div>${snapshot.val().userReview}</div>`;
       // // Change the HTML to reflect
-      //this saved review maybe, or make id for saved review dynamic????????????????
       $("#savedReview").append(reviewDiv);
-      // $("#").text(snapshot.val().userStarRating);
-
       // Handle the errors
     }, function (errorObject) {
       console.log("Errors handled: " + errorObject.code);
