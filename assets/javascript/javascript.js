@@ -85,6 +85,7 @@ $(document).ready(function () {
         trailInfo.empty();
         //loop through response to create a div for each trail
         for (let i = 0; i < response.trails.length; i++) {
+
           let currentTrail = response.trails[i];
           let trailInfoDiv = $("<div class='col-md-6 col-sm-12 trailInfoDiv'>");
 
@@ -111,10 +112,10 @@ $(document).ready(function () {
       });
   }
 
-  //mapquest api function
+  //mapquest api function geocode
   function geocode() {
     //get city name from user input
-    let cityName = $("#city").val().trim()
+    let cityName = $("#city").val().trim();
     // Here we are building the URL we need to query the database
     let geocodeAPIKey = "5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK";
     let geocodeQueryURL = "https://www.mapquestapi.com/geocoding/v1/address?key=" + geocodeAPIKey + "&location=" + cityName;
@@ -135,6 +136,61 @@ $(document).ready(function () {
   };
 
 
+  // // mapquest api function directions
+  // function directions(lat, lon) {
+  //   let start = $("#startInput").val().trim();
+  //   let end = lat, lon
+  //   // Here we are building the URL we need to query the database
+  //   let directionsAPIKey = "5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK";
+  //   let directionsQueryURL = "https://www.mapquestapi.com/directions/v2/route?key=" + directionsAPIKey + "&from=" + start + "&to=" + end + "&outFormat=json&ambiguities=ignore&routeType=fastest&doReverseGeocode=false&enhancedNarrative=false&avoidTimedConditions=false";
+
+  //   // Here we run our AJAX call to the mapquest API
+  //   $.ajax({
+  //     url: directionsQueryURL,
+  //     method: "GET"
+  //   })
+  //     // We store all of the retrieved data inside of an object called "response"
+  //     .then(function (response) {
+  //       console.log("direction function working?" + response.distance)
+  //       let map = L.mapquest.map('map', {
+  //         center: [40.7128, -74.0059],
+  //         layers: L.mapquest.tileLayer('map'),
+  //         zoom: 13
+  //       });
+  //       $("#map").append(map);
+  //     });
+  //   geocode();
+  // };
+
+
+
+
+  function directions() {
+    L.mapquest.key = '5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK';
+
+    var map = L.mapquest.map('map', {
+      center: [40.7128, -74.0059],
+      layers: L.mapquest.tileLayer('map'),
+      zoom: 13
+    });
+    //need to get these inputs in //   let start = $("#startInput").val().trim();
+    //   let end = lat, lon
+    L.mapquest.directions().route({
+      start: "9400 east iliff ave, denver, co 80231",
+      end: "18 laurel ave, binghamton, ny 13905",
+    });
+  }
+
+  function submitStartCity() {
+    //event handler for submit start point input
+    $("#directionsSubmitBtn").on("click", function (event) {
+      //prevent form from submiting
+      event.preventDefault();
+      let start = $("#startInput").val().trim();
+      console.log("submit start city" + start);
+      console.log("start submit clicking")
+    });
+  };
 
   //event handler for submit city input
   $("#submit-button").on("click", function (event) {
@@ -156,6 +212,8 @@ $(document).ready(function () {
     let myModal = $('.modal');
     //which ever trail is clicked find its trail data
     let currentTrail = $(this).data('trail');
+    // $(this).attr("src", $(this).attr(currentTrail.name));
+    //let currentTrailReview = 
 
     $('#trailModalLabel').text(currentTrail.name);
     $('#trailModalBody').html(`
@@ -215,12 +273,23 @@ $(document).ready(function () {
                             <br/><br/>
                             <form>
                               <div class="form-group">
-                                <p class="savedReviewTitle">Thoughts on ${currentTrail.name}...</p>
+                                <p class="savedReviewTitle"></p>
                                 <p id="savedReview"></p>
                         </div>
                         </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="navigateTab">we will add a place to navigate here</div>
+                        <div role="tabpanel" class="tab-pane" id="navigateTab">
+                        <form>
+                              <div class="form-group">
+                                <textarea class="form-control" id="startInput" placeholder="Enter Starting address: street, city, state, zip code" rows="3"></textarea>
+                                <br/>
+                                <button type="button" id="directionsSubmitBtn" class="btn btn-md submit-review">Submit</button>
+                              </div>
+                            </form>
+                             
+                            <div id="map" style="width: 100%; height: 530px;"></div>
+                          
+                            </div>
                     </div>
                
             </div>
@@ -237,38 +306,20 @@ $(document).ready(function () {
 
       const reviewDiv = `<div>${snapshot.val().userReview}</div>`;
       // // Change the HTML to reflect
+      //this saved review maybe, or make id for saved review dynamic????????????????
       $("#savedReview").append(reviewDiv);
-      // $("#email-display").text(snapshot.val().userStarRating);
+      // $("#").text(snapshot.val().userStarRating);
 
       // Handle the errors
     }, function (errorObject) {
       console.log("Errors handled: " + errorObject.code);
     });
+    directions();
+    submitStartCity()
 
   });
 
-  /* <button type="button" class="btn btn-outline-primary readReviewBtn">Read Reviews</button>
-        <button type="button" class="btn btn-outline-primary leaveReviewBtn">Leave Review</button> */
-  // <button type="button" class="btn btn-outline-primary navigateBtn">Navigate to ${currentTrail.name}</button>
 
-
-  // //on click event for read review
-  // $(document.body).on("click", ".readReviewBtn", function () {
-  //   console.log("clck is working on read review btn")
-
-  // });
-
-  // //on click event for leave review
-  // $(document.body).on("click", ".leaveReviewBtn", function () {
-  //   console.log("clck is working on leave review btn")
-
-  // });
-
-  // // on click event for map
-  // $(document.body).on("click", ".navigateBtn", function () {
-  //   console.log("clck is working on navigate btn")
-
-  // });
 
 
 });
