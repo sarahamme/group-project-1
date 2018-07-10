@@ -103,3 +103,8 @@ h1 {
     color: white;
     border: #ffffff;
 }
+.about-photo{
+    width: 370px;
+    height: 470px;
+    border-radius: 2%;
+}
