@@ -21,17 +21,16 @@ $(document).ready(function () {
   $(document.body).on("click", "#reviewSubmitBtn", function (event) {
     // Don't refresh the page
     event.preventDefault();
-    console.log("Review Form submit")
     // logic for storing and retrieving the reveiw
-    // userStarRating = $("#userStarRating").val().trim();
     let userReview = $("#userReview").val().trim();
-
+    //grab the trail id from the reviewSubmitBtn through the hike api and .data
     const trailId = $(this).attr('data-trailId');
-
+    //add trails so that ID and user review will be children of trails
     database.ref('trails/' + trailId).push({
       // userStarRating: userStarRating,
       userReview: userReview,
     });
+    //empty input after retrieve the user input
     $("#userReview").val("");
   });
 
@@ -108,10 +107,8 @@ $(document).ready(function () {
       });
   }
 
-  //mapquest api function geocode
+  //mapquest api function geocode pass in user input city and a callback function
   function geocode(cityName, callback) {
-    //get city name from user input
-    // let cityName = $("#city").val().trim();
     // Here we are building the URL we need to query the database
     let geocodeAPIKey = "5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK";
     let geocodeQueryURL = "https://www.mapquestapi.com/geocoding/v1/address?key=" + geocodeAPIKey + "&location=" + cityName;
@@ -126,10 +123,8 @@ $(document).ready(function () {
         //store the latitude and longitude in variables to be used in hiking api to convert city input to lat lon
         let lat = response.results[0].locations[0].latLng.lat
         let lon = response.results[0].locations[0].latLng.lng
-        //run the hiking project api with the lat lon arguments
-        // searchCityTrails(lat, lon);
+
         callback(lat, lon);
-        return lat, lon;
       });
   };
 
@@ -148,8 +143,6 @@ $(document).ready(function () {
       start: startAddress,
       end: [endLat, endLon],
     });
-    // $("#startInput").val('')
-    // console.log("here is the lon" + lon);
   }
 
   $('#closeMapBtn').on('click', function (event) {
@@ -163,16 +156,12 @@ $(document).ready(function () {
 
 
 
-
+  //function to run when click on submit for the start city directions
   function submitStartCity() {
     //event handler for submit start point input
     $("#directionsSubmitBtn").on("click", function (event) {
       //prevent form from submiting
       event.preventDefault();
-
-      // console.log("submit start city" + start);
-      console.log("start submit clicking")
-      // directions();
 
       // Get lat and lon data attrbutes from the navigation button
       const endLat = $(this).attr('data-lat');
@@ -187,6 +176,7 @@ $(document).ready(function () {
       //show the map
       $('#mapContainer').show();
       directions(startAddress, endLat, endLon);
+      $("#startInput").val('')
 
     });
   };
@@ -197,9 +187,9 @@ $(document).ready(function () {
     event.preventDefault();
     // This line grabs the input from the textbox
     let cityName = $("#city").val().trim()
-    //run api functions with user city input
+    //run weather api function with user city input
     searchCityWeather(cityName);
-    // geocode(cityName);
+    //run geocode api function with user city input and search city trails to get lat lon passed
     geocode(cityName, searchCityTrails);
     //empty input box after collecting user input
     $("#city").val('')
@@ -212,8 +202,6 @@ $(document).ready(function () {
     let myModal = $('.modal');
     //which ever trail is clicked find its trail data
     let currentTrail = $(this).data('trail');
-    // $(this).attr("src", $(this).attr(currentTrail.name));
-    //let currentTrailReview = 
 
     $('#trailModalLabel').text(currentTrail.name);
     $('#trailModalBody').html(`
@@ -302,7 +290,6 @@ $(document).ready(function () {
       console.log(snapshot.val());
       const reviewDiv = `<div>${snapshot.val().userReview}</div>`;
       // // Change the HTML to reflect
-      //here we need to append to something dynamic
       $("#savedReview").append(reviewDiv);
       // Handle the errors
     }, function (errorObject) {
