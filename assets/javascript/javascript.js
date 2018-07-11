@@ -16,23 +16,21 @@ $(document).ready(function () {
 
   let database = firebase.database();
 
-  // Initial Values
-  // let userStarRating = "";
-  // let userReview = "";
 
   // Capture Button Click review submit btn
   $(document.body).on("click", "#reviewSubmitBtn", function (event) {
     // Don't refresh the page
     event.preventDefault();
-    console.log("Review Form submit")
     // logic for storing and retrieving the reveiw
-    // userStarRating = $("#userStarRating").val().trim();
     let userReview = $("#userReview").val().trim();
-
-    database.ref().push({
+    //grab the trail id from the reviewSubmitBtn through the hike api and .data
+    const trailId = $(this).attr('data-trailId');
+    //add trails so that ID and user review will be children of trails
+    database.ref('trails/' + trailId).push({
       // userStarRating: userStarRating,
       userReview: userReview,
     });
+    //empty input after retrieve the user input
     $("#userReview").val("");
   });
 
@@ -68,7 +66,7 @@ $(document).ready(function () {
   };
 
   //hiking project api function
-  //we will be grabbing the lat and lon from the mapquest api
+  //we will be grabbing the lat and lon from the mapquest api to use here
   function searchCityTrails(lat, lon) {
     // Here we are building the URL we need to query the database
     let hikeAPIKey = "200303527-f280c2c52a126cb1818bd9a9a56661fd";
@@ -85,6 +83,7 @@ $(document).ready(function () {
         trailInfo.empty();
         //loop through response to create a div for each trail
         for (let i = 0; i < response.trails.length; i++) {
+
           let currentTrail = response.trails[i];
           let trailInfoDiv = $("<div class='col-md-6 col-sm-12 trailInfoDiv'>");
 
@@ -104,17 +103,12 @@ $(document).ready(function () {
           trailInfoDiv.data('trail', currentTrail);
 
           trailInfo.append(trailInfoDiv);
-
-
         }
-
       });
   }
 
-  //mapquest api function
-  function geocode() {
-    //get city name from user input
-    let cityName = $("#city").val().trim()
+  //mapquest api function geocode pass in user input city and a callback function
+  function geocode(cityName, callback) {
     // Here we are building the URL we need to query the database
     let geocodeAPIKey = "5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK";
     let geocodeQueryURL = "https://www.mapquestapi.com/geocoding/v1/address?key=" + geocodeAPIKey + "&location=" + cityName;
@@ -129,12 +123,63 @@ $(document).ready(function () {
         //store the latitude and longitude in variables to be used in hiking api to convert city input to lat lon
         let lat = response.results[0].locations[0].latLng.lat
         let lon = response.results[0].locations[0].latLng.lng
-        //run the hiking project api with the lat lon arguments
-        searchCityTrails(lat, lon);
+
+        callback(lat, lon);
       });
   };
 
 
+  //function using mapQuest.js no need for ajax call
+  function directions(startAddress, endLat, endLon) {
+    L.mapquest.key = '5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK';
+
+    let map = L.mapquest.map('map', {
+      center: [endLat, endLon],
+      layers: L.mapquest.tileLayer('hybrid'),
+      zoom: 10,
+    });
+
+    L.mapquest.directions().route({
+      start: startAddress,
+      end: [endLat, endLon],
+    });
+  }
+
+  $('#closeMapBtn').on('click', function (event) {
+    //hide map container
+    $('#mapContainer').hide();
+    //show search container
+    $('#trailSearchContainer').show();
+    //show modal
+    $('.modal').modal('show');
+  });
+
+
+
+  //function to run when click on submit for the start city directions
+  function submitStartCity() {
+    //event handler for submit start point input
+    $("#directionsSubmitBtn").on("click", function (event) {
+      //prevent form from submiting
+      event.preventDefault();
+
+      // Get lat and lon data attrbutes from the navigation button
+      const endLat = $(this).attr('data-lat');
+      const endLon = $(this).attr('data-lon');
+
+      const startAddress = $("#startInput").val().trim();
+
+      //close the modal
+      $('.modal').modal('hide');
+      //Hide the search container
+      $('#trailSearchContainer').hide();
+      //show the map
+      $('#mapContainer').show();
+      directions(startAddress, endLat, endLon);
+      $("#startInput").val('')
+
+    });
+  };
 
   //event handler for submit city input
   $("#submit-button").on("click", function (event) {
@@ -142,9 +187,10 @@ $(document).ready(function () {
     event.preventDefault();
     // This line grabs the input from the textbox
     let cityName = $("#city").val().trim()
-    //run api functions with user city input
+    //run weather api function with user city input
     searchCityWeather(cityName);
-    geocode(cityName);
+    //run geocode api function with user city input and search city trails to get lat lon passed
+    geocode(cityName, searchCityTrails);
     //empty input box after collecting user input
     $("#city").val('')
   });
@@ -169,7 +215,7 @@ $(document).ready(function () {
 
                         <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
                         </li>
-                        
+
                         <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Plan Your Trip</a>
                         </li>
 
@@ -185,7 +231,7 @@ $(document).ready(function () {
                         <p>Condition Details: ${currentTrail.conditionDetails}</p>
                         <img class="trailImg" src="${currentTrail.imgMedium}"></div>
                         <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
-                       
+
                         <div class="col-md-12 ratingsReview">
                             <h4>Rate ${currentTrail.name}</h4>
                             <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
@@ -198,12 +244,13 @@ $(document).ready(function () {
                               <div class="form-group">
                                 <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3"></textarea>
                                 <br/>
-                                <button type="button" id="reviewSubmitBtn" class="btn btn-md submit-review">Submit</button>
+                                <button type="button" id="reviewSubmitBtn" class="btn btn-md submit-review"
+                                  data-trailId="${currentTrail.id}">Submit</button>
                               </div>
                             </form>
                           </div>
                         </div>
-                        
+
                         <div role="tabpanel" class="tab-pane" id="readReviewsTab">
                         <div class="col-md-12 savedRatingsReview">
                             <h4>Rating For ${currentTrail.name}</h4>
@@ -215,60 +262,50 @@ $(document).ready(function () {
                             <br/><br/>
                             <form>
                               <div class="form-group">
-                                <p class="savedReviewTitle">Thoughts on ${currentTrail.name}...</p>
+                                <p class="savedReviewTitle"></p>
                                 <p id="savedReview"></p>
                         </div>
                         </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="navigateTab">we will add a place to navigate here</div>
+                        <div role="tabpanel" class="tab-pane" id="navigateTab">
+                        <form>
+                              <div class="form-group">
+                                <textarea class="form-control" id="startInput" placeholder="Enter Starting address: street, city, state, zip code" rows="3"></textarea>
+                                <br/>
+                                <a href="map.html" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn"
+                                  data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}" >Submit</a>
+                              </div>
+                            </form>
+                          </div>
                     </div>
-               
             </div>
     `);
-    //show its modal
+    //show modal
     myModal.modal('show');
-    console.log("click working 1");
 
+    //had to move firebase loader inside div click because of modal
     // Firebase watcher + initial loader 
-    database.ref().on("child_added", function (snapshot) {
-
+    database.ref('trails/' + currentTrail.id).on("child_added", function (snapshot) {
       // Log everything that's coming out of snapshot
       console.log(snapshot.val());
-
       const reviewDiv = `<div>${snapshot.val().userReview}</div>`;
       // // Change the HTML to reflect
       $("#savedReview").append(reviewDiv);
-      // $("#email-display").text(snapshot.val().userStarRating);
-
       // Handle the errors
     }, function (errorObject) {
       console.log("Errors handled: " + errorObject.code);
     });
+    submitStartCity()
 
   });
 
-  /* <button type="button" class="btn btn-outline-primary readReviewBtn">Read Reviews</button>
-        <button type="button" class="btn btn-outline-primary leaveReviewBtn">Leave Review</button> */
-  // <button type="button" class="btn btn-outline-primary navigateBtn">Navigate to ${currentTrail.name}</button>
 
 
-  // //on click event for read review
-  // $(document.body).on("click", ".readReviewBtn", function () {
-  //   console.log("clck is working on read review btn")
+  // <div id="map" style="width: 100%; height: 300px;"></div>
 
-  // });
 
-  // //on click event for leave review
-  // $(document.body).on("click", ".leaveReviewBtn", function () {
-  //   console.log("clck is working on leave review btn")
-
-  // });
-
-  // // on click event for map
-  // $(document.body).on("click", ".navigateBtn", function () {
-  //   console.log("clck is working on navigate btn")
-
-  // });
+  //Hide map div
+  $('#mapContainer').hide();
 
 
 });
