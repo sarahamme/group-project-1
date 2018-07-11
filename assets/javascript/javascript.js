@@ -26,7 +26,9 @@ $(document).ready(function () {
     // userStarRating = $("#userStarRating").val().trim();
     let userReview = $("#userReview").val().trim();
 
-    database.ref().push({
+    const trailId = $(this).attr('data-trailId');
+
+    database.ref('trails/' + trailId).push({
       // userStarRating: userStarRating,
       userReview: userReview,
     });
@@ -107,9 +109,9 @@ $(document).ready(function () {
   }
 
   //mapquest api function geocode
-  function geocode() {
+  function geocode(cityName, callback) {
     //get city name from user input
-    let cityName = $("#city").val().trim();
+    // let cityName = $("#city").val().trim();
     // Here we are building the URL we need to query the database
     let geocodeAPIKey = "5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK";
     let geocodeQueryURL = "https://www.mapquestapi.com/geocoding/v1/address?key=" + geocodeAPIKey + "&location=" + cityName;
@@ -125,42 +127,69 @@ $(document).ready(function () {
         let lat = response.results[0].locations[0].latLng.lat
         let lon = response.results[0].locations[0].latLng.lng
         //run the hiking project api with the lat lon arguments
-        searchCityTrails(lat, lon);
+        // searchCityTrails(lat, lon);
+        callback(lat, lon);
+        return lat, lon;
       });
   };
 
+
   //function using mapQuest.js no need for ajax call
-  function directions() {
+  function directions(startAddress, endLat, endLon) {
     L.mapquest.key = '5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK';
 
     let map = L.mapquest.map('map', {
-      center: [40.7128, -74.0059],
-      layers: L.mapquest.tileLayer('map'),
-      zoom: 100,
+      center: [endLat, endLon],
+      layers: L.mapquest.tileLayer('hybrid'),
+      zoom: 10,
     });
-    //need to get these inputs in   let start = $("#startInput").val().trim();
-    //   let end = lat, lon
+
     L.mapquest.directions().route({
-      start: '350 5th Ave, New York, NY 10118',
-      end: 'One Liberty Plaza, New York, NY 10006'
+      start: startAddress,
+      end: [endLat, endLon],
     });
+    // $("#startInput").val('')
+    // console.log("here is the lon" + lon);
   }
 
+  $('#closeMapBtn').on('click', function (event) {
+    //hide map container
+    $('#mapContainer').hide();
+    //show search container
+    $('#trailSearchContainer').show();
+    //show modal
+    $('.modal').modal('show');
+  });
 
 
 
 
-  // function submitStartCity() {
-  //   //event handler for submit start point input
-  //   $("#directionsSubmitBtn").on("click", function (event) {
-  //     //prevent form from submiting
-  //     event.preventDefault();
-  //     let start = $("#startInput").val().trim();
-  //     let end = lat, lon
-  //     console.log("submit start city" + start);
-  //     console.log("start submit clicking")
-  //   });
-  // };
+  function submitStartCity() {
+    //event handler for submit start point input
+    $("#directionsSubmitBtn").on("click", function (event) {
+      //prevent form from submiting
+      event.preventDefault();
+
+      // console.log("submit start city" + start);
+      console.log("start submit clicking")
+      // directions();
+
+      // Get lat and lon data attrbutes from the navigation button
+      const endLat = $(this).attr('data-lat');
+      const endLon = $(this).attr('data-lon');
+
+      const startAddress = $("#startInput").val().trim();
+
+      //close the modal
+      $('.modal').modal('hide');
+      //Hide the search container
+      $('#trailSearchContainer').hide();
+      //show the map
+      $('#mapContainer').show();
+      directions(startAddress, endLat, endLon);
+
+    });
+  };
 
   //event handler for submit city input
   $("#submit-button").on("click", function (event) {
@@ -170,7 +199,8 @@ $(document).ready(function () {
     let cityName = $("#city").val().trim()
     //run api functions with user city input
     searchCityWeather(cityName);
-    geocode(cityName);
+    // geocode(cityName);
+    geocode(cityName, searchCityTrails);
     //empty input box after collecting user input
     $("#city").val('')
   });
@@ -197,7 +227,7 @@ $(document).ready(function () {
 
                         <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
                         </li>
-                        
+
                         <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Plan Your Trip</a>
                         </li>
 
@@ -213,7 +243,7 @@ $(document).ready(function () {
                         <p>Condition Details: ${currentTrail.conditionDetails}</p>
                         <img class="trailImg" src="${currentTrail.imgMedium}"></div>
                         <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
-                       
+
                         <div class="col-md-12 ratingsReview">
                             <h4>Rate ${currentTrail.name}</h4>
                             <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
@@ -226,12 +256,13 @@ $(document).ready(function () {
                               <div class="form-group">
                                 <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3"></textarea>
                                 <br/>
-                                <button type="button" id="reviewSubmitBtn" class="btn btn-md submit-review">Submit</button>
+                                <button type="button" id="reviewSubmitBtn" class="btn btn-md submit-review"
+                                  data-trailId="${currentTrail.id}">Submit</button>
                               </div>
                             </form>
                           </div>
                         </div>
-                        
+
                         <div role="tabpanel" class="tab-pane" id="readReviewsTab">
                         <div class="col-md-12 savedRatingsReview">
                             <h4>Rating For ${currentTrail.name}</h4>
@@ -253,10 +284,10 @@ $(document).ready(function () {
                               <div class="form-group">
                                 <textarea class="form-control" id="startInput" placeholder="Enter Starting address: street, city, state, zip code" rows="3"></textarea>
                                 <br/>
-                                <button type="button" id="directionsSubmitBtn" class="btn btn-md submit-review">Submit</button>
+                                <a href="map.html" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn"
+                                  data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}" >Submit</a>
                               </div>
                             </form>
-                            <div id="map" style="width: 100%; height: 300px;"></div>
                           </div>
                     </div>
             </div>
@@ -266,22 +297,28 @@ $(document).ready(function () {
 
     //had to move firebase loader inside div click because of modal
     // Firebase watcher + initial loader 
-    database.ref().on("child_added", function (snapshot) {
+    database.ref('trails/' + currentTrail.id).on("child_added", function (snapshot) {
       // Log everything that's coming out of snapshot
       console.log(snapshot.val());
       const reviewDiv = `<div>${snapshot.val().userReview}</div>`;
       // // Change the HTML to reflect
+      //here we need to append to something dynamic
       $("#savedReview").append(reviewDiv);
       // Handle the errors
     }, function (errorObject) {
       console.log("Errors handled: " + errorObject.code);
     });
-    directions();
     submitStartCity()
 
   });
 
 
+
+  // <div id="map" style="width: 100%; height: 300px;"></div>
+
+
+  //Hide map div
+  $('#mapContainer').hide();
 
 
 });
