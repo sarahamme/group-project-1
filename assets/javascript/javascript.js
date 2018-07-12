@@ -136,6 +136,7 @@ $(document).ready(function () {
 
   //function using mapQuest.js no need for ajax call
   function directions(startAddress, endLat, endLon) {
+    $("#mapArea").empty().append(`<div id="map" style="width: 100%; height: 530px;"></div>`);
     L.mapquest.key = '5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK';
 
     let map = L.mapquest.map('map', {
@@ -252,7 +253,7 @@ $(document).ready(function () {
                               </select>
                             </div>
                             <br/>
-                            <form>
+                            <form id="reviewForm">
                               <div class="form-group">
                                 <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
                                 <br/>
