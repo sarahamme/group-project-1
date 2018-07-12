@@ -141,6 +141,11 @@ h1 {
    -webkit-text-stroke-width: 2px;
    -webkit-text-stroke-color: #FFD04B;
    line-height: 200%;
+   cursor: pointer;
+}
+
+.fa-star:hover {
+    color: #FFD04B;
 }
 
 .submit-review {
@@ -153,6 +158,7 @@ h1 {
     width: 90%;
     height: 90%;
     border-radius: 2%;
+
 
 }
 
@@ -197,3 +203,4 @@ h1 {
   .wind{
       size: 20px;
   }
+
