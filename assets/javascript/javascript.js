@@ -148,6 +148,7 @@ $(document).ready(function () {
       start: startAddress,
       end: [endLat, endLon],
     });
+
   }
 
   $('#closeMapBtn').on('click', function (event) {
@@ -281,7 +282,9 @@ $(document).ready(function () {
                         <div role="tabpanel" class="tab-pane" id="navigateTab">
                         <form>
                               <div class="form-group">
-                                <textarea class="form-control" id="startInput" placeholder="Enter Starting address: street, city, state, zip code" rows="3" required></textarea>
+                              <br/>
+                              <h5>Get Directions</h5>
+                                <textarea class="form-control" id="startInput" placeholder="Enter Starting Address: street, city, state, zip code" rows="3" required></textarea>
                                 <br/>
                                 <a href="map.html" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn"
                                   data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}" >Submit</a>
