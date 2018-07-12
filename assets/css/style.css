@@ -96,6 +96,11 @@ h1 {
    -webkit-text-stroke-width: 2px;
    -webkit-text-stroke-color: #FFD04B;
    line-height: 200%;
+   cursor: pointer;
+}
+
+.fa-star:hover {
+    color: #FFD04B;
 }
 
 .submit-review {
@@ -103,10 +108,12 @@ h1 {
     color: white;
     border: #ffffff;
 }
-
-/* Css for about page  */
 .about-photo{
-    width: 350px;
-    height: 450px;
+    width: 370px;
+    height: 470px;
     border-radius: 2%;
+}
+
+#map{
+
 }
