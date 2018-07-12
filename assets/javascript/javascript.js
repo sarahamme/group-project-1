@@ -3,6 +3,15 @@
 
 $(document).ready(function () {
 
+  //sticky nav bar  
+$(window).on('scroll', function (){
+    if($(window).scrollTop()) {
+      $('nav').addClass('black');
+    } else {
+      $('nav').removeClass('black');
+    }
+  });
+  
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyAnkB5LXjeLkSHzKilnnDUwbT3ouMgyP14",
@@ -66,10 +75,12 @@ $(document).ready(function () {
         let fTempRound = Math.round(fTemp);
         // Transfer content to HTML
         $(".city").html("<h2>" + response.name + " Weather Details</h2>");
-        $(".wind").text("Summary: " + response.weather[0].description);
+        // $(".wind").text("Summary: " + response.weather[0].description);
         $(".humidity").text("Humidity: " + response.main.humidity + "%");
         $(".temp").text("Temperature (F) " + fTempRound);
+        $(".wind").html("Summary: " + "<img src='http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'>");
       });
+       
   };
 
   //hiking project api function
@@ -316,6 +327,11 @@ $(document).ready(function () {
 
   //Hide map div
   $('#mapContainer').hide();
+
+// sticky navbar
+
+
+
 
 
 });
