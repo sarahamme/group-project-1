@@ -23,12 +23,16 @@ $(document).ready(function () {
     event.preventDefault();
     // logic for storing and retrieving the reveiw
     let userReview = $("#userReview").val().trim();
+
+    //
+    let dropdownRating = $('#starRatingInput').val()
     //grab the trail id from the reviewSubmitBtn through the hike api and .data
     const trailId = $(this).attr('data-trailId');
     //add trails so that ID and user review will be children of trails
     database.ref('trails/' + trailId).push({
       // userStarRating: userStarRating,
       userReview: userReview,
+      dropdownRating: dropdownRating,
     });
     //empty input after retrieve the user input
     $("#userReview").val("");
@@ -234,12 +238,17 @@ $(document).ready(function () {
 
                         <div class="col-md-12 ratingsReview">
                             <h4>Rate ${currentTrail.name}</h4>
-                            <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
-                            <br/><br/>
+                            <br/>
+                            <div class="form-group">
+                              <select class="form-control" id="starRatingInput">
+                                <option value="5">5 Stars</option>
+                                <option value="5">4 Stars</option>
+                                <option value="5">3 Stars</option>
+                                <option value="5">2 Stars</option>
+                                <option value="5">1 Stars</option>
+                              </select>
+                            </div>
+                            <br/>
                             <form>
                               <div class="form-group">
                                 <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3"></textarea>
@@ -253,7 +262,7 @@ $(document).ready(function () {
 
                         <div role="tabpanel" class="tab-pane" id="readReviewsTab">
                         <div class="col-md-12 savedRatingsReview">
-                            <h4>Rating For ${currentTrail.name}</h4>
+                            <h4>Reviews For ${currentTrail.name}</h4>
                             <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
                             <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
                             <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
@@ -288,7 +297,9 @@ $(document).ready(function () {
     database.ref('trails/' + currentTrail.id).on("child_added", function (snapshot) {
       // Log everything that's coming out of snapshot
       console.log(snapshot.val());
-      const reviewDiv = `<div>${snapshot.val().userReview}</div>`;
+      const reviewDiv = `
+      <div><h4>Rating: ${snapshot.val().dropdownRating}</h4></div>
+      <div>${snapshot.val().userReview}</div>`;
       // // Change the HTML to reflect
       $("#savedReview").append(reviewDiv);
       // Handle the errors
