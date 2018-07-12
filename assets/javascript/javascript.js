@@ -29,6 +29,7 @@ $(document).ready(function () {
     database.ref('trails/' + trailId).push({
       // userStarRating: userStarRating,
       userReview: userReview,
+
     });
     //empty input after retrieve the user input
     $("#userReview").val("");
@@ -182,7 +183,8 @@ $(document).ready(function () {
   };
 
   //event handler for submit city input
-  $("#submit-button").on("click", function (event) {
+  // $("#submit-button").on("submit", function (event) {
+  $("#hike-form").on("submit", function (event) {
     //prevent form from submiting
     event.preventDefault();
     // This line grabs the input from the textbox
@@ -242,7 +244,7 @@ $(document).ready(function () {
                             <br/><br/>
                             <form>
                               <div class="form-group">
-                                <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3"></textarea>
+                                <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
                                 <br/>
                                 <button type="button" id="reviewSubmitBtn" class="btn btn-md submit-review"
                                   data-trailId="${currentTrail.id}">Submit</button>
@@ -270,7 +272,7 @@ $(document).ready(function () {
                         <div role="tabpanel" class="tab-pane" id="navigateTab">
                         <form>
                               <div class="form-group">
-                                <textarea class="form-control" id="startInput" placeholder="Enter Starting address: street, city, state, zip code" rows="3"></textarea>
+                                <textarea class="form-control" id="startInput" placeholder="Enter Starting address: street, city, state, zip code" rows="3" required></textarea>
                                 <br/>
                                 <a href="map.html" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn"
                                   data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}" >Submit</a>
