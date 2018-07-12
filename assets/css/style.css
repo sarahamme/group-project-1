@@ -2,23 +2,67 @@ body {
     overflow-x: hidden;
 }
 
-.navbar-brand {
-    font-size: 50px;
-    font-family: 'Amatic SC', cursive;
-    margin-left: 2%;
-    float: right;
+nav {
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    padding: 10px 100px;
+    box-sizing: border-box;
+    transition: .3s;
+    z-index: 100;
 }
 
-.menuItems {
+nav.black {
+    background: rgba(255, 208, 75, 0.6);
+    height: 100px;
+    padding: 10px 100px;
+}
+
+nav .logo {
+    /* padding: 22px 20px; */
+    height: 80px;
     float: left;
+    font-size: 24px;
+    transition: .3s;
+    font-size: 60px;
+    font-family: 'Amatic SC', cursive;
+    color: #151515;
+}
+nav.black .logo{
+    color: #fff;
+}
+nav ul {
+    list-style: none;
+    float: right;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+nav ul li {
+    list-style: none;
+}
+nav ul li a {
+    line-height: 80px;
+    color: #151515;
+    padding: 12px 30px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: .3s;
+}
+nav.black ul li a{
+    color: #fff;
 }
 
-.nav-link{
-    font-size: 30px;
+nav ul li a:focus{
+    outline: none;
 }
-.nav-link:hover{
-    background-color: #FFD04B;
-    color: white;
+
+nav ul li a.active{
+    background: #FFD04B;
+    color: #fff;
+    border-radius: 6px;
 }
 
 h1 {
@@ -79,6 +123,7 @@ h1 {
 
 .trailInfo{
     margin-top: 50px;
+    text-align: center;
 }
 
 .trailImg {
@@ -104,7 +149,51 @@ h1 {
     border: #ffffff;
 }
 .about-photo{
-    width: 370px;
-    height: 470px;
+    display: block;
+    width: 90%;
+    height: 90%;
+    border-radius: 2%;
+
+}
+
+.overlay{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 208, 75, 0.2);
+    overflow: hidden;
+    width: 0;
+    height: 100%;
+    transition: .5s ease;
     border-radius: 2%;
 }
+.text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+
+.something-else{
+    position: relative;
+    width: 50%;
+}
+
+.something-else:hover .overlay {
+    width: 100%;
+  }
+
+  #explore-link{
+      color: white;
+      font-family: 'Amatic SC', cursive;
+      font-size: 60px;
+    
+  }
+  .wind{
+      size: 20px;
+  }
