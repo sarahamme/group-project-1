@@ -113,7 +113,7 @@ h1 {
     height: 470px;
     border-radius: 2%;
 }
-
-#map{
+.leaflet-control-mapquest-narrative{
+    max-height: 400px !important;
 
 }
