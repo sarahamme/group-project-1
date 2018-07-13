@@ -31,12 +31,17 @@ $(window).on('scroll', function (){
     event.preventDefault();
     // logic for storing and retrieving the reveiw
     let userReview = $("#userReview").val().trim();
+
+    //
+    let dropdownRating = $('#starRatingInput').val()
     //grab the trail id from the reviewSubmitBtn through the hike api and .data
     const trailId = $(this).attr('data-trailId');
     //add trails so that ID and user review will be children of trails
     database.ref('trails/' + trailId).push({
       // userStarRating: userStarRating,
       userReview: userReview,
+      dropdownRating: dropdownRating,
+
     });
     //empty input after retrieve the user input
     $("#userReview").val("");
@@ -140,6 +145,7 @@ $(window).on('scroll', function (){
 
   //function using mapQuest.js no need for ajax call
   function directions(startAddress, endLat, endLon) {
+    $("#mapArea").empty().append(`<div id="map" style="width: 100%; height: 530px;"></div>`);
     L.mapquest.key = '5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK';
 
     let map = L.mapquest.map('map', {
@@ -152,6 +158,7 @@ $(window).on('scroll', function (){
       start: startAddress,
       end: [endLat, endLon],
     });
+
   }
 
   $('#closeMapBtn').on('click', function (event) {
@@ -191,7 +198,8 @@ $(window).on('scroll', function (){
   };
 
   //event handler for submit city input
-  $("#submit-button").on("click", function (event) {
+  // $("#submit-button").on("submit", function (event) {
+  $("#hike-form").on("submit", function (event) {
     //prevent form from submiting
     event.preventDefault();
     // This line grabs the input from the textbox
@@ -243,15 +251,20 @@ $(window).on('scroll', function (){
 
                         <div class="col-md-12 ratingsReview">
                             <h4>Rate ${currentTrail.name}</h4>
-                            <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
-                            <br/><br/>
-                            <form>
+                            <br/>
+                            <div class="form-group">
+                              <select class="form-control" id="starRatingInput">
+                                <option value="5">5 Stars</option>
+                                <option value="5">4 Stars</option>
+                                <option value="5">3 Stars</option>
+                                <option value="5">2 Stars</option>
+                                <option value="5">1 Stars</option>
+                              </select>
+                            </div>
+                            <br/>
+                            <form id="reviewForm">
                               <div class="form-group">
-                                <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3"></textarea>
+                                <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
                                 <br/>
                                 <button type="button" id="reviewSubmitBtn" class="btn btn-md submit-review"
                                   data-trailId="${currentTrail.id}">Submit</button>
@@ -262,7 +275,7 @@ $(window).on('scroll', function (){
 
                         <div role="tabpanel" class="tab-pane" id="readReviewsTab">
                         <div class="col-md-12 savedRatingsReview">
-                            <h4>Rating For ${currentTrail.name}</h4>
+                            <h4>Reviews For ${currentTrail.name}</h4>
                             <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
                             <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
                             <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
@@ -279,7 +292,9 @@ $(window).on('scroll', function (){
                         <div role="tabpanel" class="tab-pane" id="navigateTab">
                         <form>
                               <div class="form-group">
-                                <textarea class="form-control" id="startInput" placeholder="Enter Starting address: street, city, state, zip code" rows="3"></textarea>
+                              <br/>
+                              <h5>Get Directions</h5>
+                                <textarea class="form-control" id="startInput" placeholder="Enter Starting Address: street, city, state, zip code" rows="3" required></textarea>
                                 <br/>
                                 <a href="map.html" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn"
                                   data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}" >Submit</a>
@@ -297,7 +312,9 @@ $(window).on('scroll', function (){
     database.ref('trails/' + currentTrail.id).on("child_added", function (snapshot) {
       // Log everything that's coming out of snapshot
       console.log(snapshot.val());
-      const reviewDiv = `<div>${snapshot.val().userReview}</div>`;
+      const reviewDiv = `
+      <div><h4>Rating: ${snapshot.val().dropdownRating}</h4></div>
+      <div>${snapshot.val().userReview}</div>`;
       // // Change the HTML to reflect
       $("#savedReview").append(reviewDiv);
       // Handle the errors
