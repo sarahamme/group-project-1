@@ -136,6 +136,7 @@ $(document).ready(function () {
 
   //function using mapQuest.js no need for ajax call
   function directions(startAddress, endLat, endLon) {
+    $("#mapArea").empty().append(`<div id="map" style="width: 100%; height: 530px;"></div>`);
     L.mapquest.key = '5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK';
 
     let map = L.mapquest.map('map', {
@@ -148,6 +149,7 @@ $(document).ready(function () {
       start: startAddress,
       end: [endLat, endLon],
     });
+
   }
 
   $('#closeMapBtn').on('click', function (event) {
@@ -251,7 +253,7 @@ $(document).ready(function () {
                               </select>
                             </div>
                             <br/>
-                            <form>
+                            <form id="reviewForm">
                               <div class="form-group">
                                 <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
                                 <br/>
@@ -281,7 +283,9 @@ $(document).ready(function () {
                         <div role="tabpanel" class="tab-pane" id="navigateTab">
                         <form>
                               <div class="form-group">
-                                <textarea class="form-control" id="startInput" placeholder="Enter Starting address: street, city, state, zip code" rows="3" required></textarea>
+                              <br/>
+                              <h5>Get Directions</h5>
+                                <textarea class="form-control" id="startInput" placeholder="Enter Starting Address: street, city, state, zip code" rows="3" required></textarea>
                                 <br/>
                                 <a href="map.html" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn"
                                   data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}" >Submit</a>
