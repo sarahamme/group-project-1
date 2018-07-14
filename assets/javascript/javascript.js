@@ -103,7 +103,7 @@ $(document).ready(function () {
 
           let img = currentTrail.imgSmallMed
           let pFive = $("<img class='trailImg'>").attr({ src: img });
-          let pSix = $(`<img src="assets/images/mainimage.jpg" class='trailImg'>`)
+          let pSix = $(`<img src="assets/images/NoImageAvailble.jpg" class='trailImg'>`)
 
           if (img === "") {
             trailInfoDiv.append(pSix);
@@ -271,12 +271,17 @@ $(document).ready(function () {
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="trailTab">
             <br/>
-            <p>${currentTrail.summary}</p>
-            <p>Stars: ${currentTrail.stars}</p>
-            <p>Trail Length: ${currentTrail.length} miles</p>
-            <p>Condition Status: ${currentTrail.conditionStatus}</p>
-            <p>Condition Details: ${currentTrail.conditionDetails}</p>
-            <img class="trailImg" src="${currentTrail.imgMedium}">
+            <div class="row">
+            <div class="col-md-6">
+            <img class="trailImg" src="${currentTrail.imgMedium ? currentTrail.imgMedium : "assets/images/NoImageAvailble.jpg"}">
+            </div>
+            <div class="col-md-6">
+            <p class="tabTrailSummary">${currentTrail.summary}</p>
+            <p class="tabTrailLength"><b>Trail Length:</b> ${currentTrail.length} miles</p>
+            <p class="tabConditionStatus"><b>Condition Status:</b> ${currentTrail.conditionStatus}</p>
+            <p class="tabConditionDetails"><b>Condition Details:</b> ${currentTrail.conditionDetails}</p>
+            </div>
+            </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
 
