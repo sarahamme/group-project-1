@@ -113,16 +113,11 @@ h1 {
     height: 470px;
     border-radius: 2%;
 }
-<<<<<<< HEAD
 
 .trailNames {
     padding-top: 20px;
 }
 
-#map{
-=======
 .leaflet-control-mapquest-narrative{
     max-height: 400px !important;
->>>>>>> 7d79d10cb4ffa5863c00a445ccf0bb80029eab41
-
 }
