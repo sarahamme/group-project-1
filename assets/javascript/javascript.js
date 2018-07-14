@@ -18,7 +18,7 @@ $(document).ready(function () {
 
 
   // Capture Button Click review submit btn
-  $(document.body).on("click", "#reviewSubmitBtn", function (event) {
+  $(document.body).on("submit", "#reviewForm", function (event) {
     // Don't refresh the page
     event.preventDefault();
     // logic for storing and retrieving the reveiw
@@ -26,17 +26,17 @@ $(document).ready(function () {
 
     //
     let dropdownRating = $('#starRatingInput').val()
-    //grab the trail id from the reviewSubmitBtn through the hike api and .data
+    //get the trail data from the reviewForm attribute through the hike api and .data
     const trailId = $(this).attr('data-trailId');
-    //add trails so that ID and user review will be children of trails
+    //add trails so that ID and user review will be children of trails put info in to firebase
     database.ref('trails/' + trailId).push({
-      // userStarRating: userStarRating,
+      // key value pairs on firebase object
       userReview: userReview,
       dropdownRating: dropdownRating,
 
     });
     //empty input after retrieve the user input
-    $("#userReview").val("");
+    $(this)[0].reset();
   });
 
 
@@ -51,7 +51,7 @@ $(document).ready(function () {
     let weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + weatherAPIKey;
 
 
-    // run our AJAX call to the OpenWeatherMap API
+    // run our AJAX call to the OpenWeatherMap API want api request to be asynchronous
     $.ajax({
       url: weatherQueryURL,
       method: "GET"
@@ -100,14 +100,23 @@ $(document).ready(function () {
           let pTwo = $("<p>").text(summary);
           trailInfoDiv.append(pTwo);
 
+
           let img = currentTrail.imgSmallMed
           let pFive = $("<img class='trailImg'>").attr({ src: img });
-          trailInfoDiv.append(pFive);
+          let pSix = $(`<img src="assets/images/mainimage.jpg" class='trailImg'>`)
 
-          // Store current trail data in the trailInfoDiv
+          if (img === "") {
+            trailInfoDiv.append(pSix);
+          } else {
+            trailInfoDiv.append(pFive);
+          }
+
+          // Store current trail object data on the trailInfoDiv
           trailInfoDiv.data('trail', currentTrail);
 
           trailInfo.append(trailInfoDiv);
+
+
         }
       });
   }
@@ -129,6 +138,7 @@ $(document).ready(function () {
         let lat = response.results[0].locations[0].latLng.lat
         let lon = response.results[0].locations[0].latLng.lng
 
+        //since chaining two ajax together have to use call back so that geocode can pass lat and lon to other functions
         callback(lat, lon);
       });
   };
@@ -136,9 +146,12 @@ $(document).ready(function () {
 
   //function using mapQuest.js no need for ajax call
   function directions(startAddress, endLat, endLon) {
+    //empty then add fresh map area
     $("#mapArea").empty().append(`<div id="map" style="width: 100%; height: 620px;"></div>`);
     L.mapquest.key = '5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK';
 
+
+    //mapquest.js
     addDirections();
 
     function addDirections() {
@@ -175,6 +188,7 @@ $(document).ready(function () {
     }
   }
 
+  //close the map
   $('#closeMapBtn').on('click', function (event) {
     //hide map container
     $('#mapContainer').hide();
@@ -186,33 +200,31 @@ $(document).ready(function () {
 
 
 
-  //function to run when click on submit for the start city directions
-  function submitStartCity() {
-    //event handler for submit start point input
-    $("#directionsSubmitBtn").on("click", function (event) {
-      //prevent form from submiting
-      event.preventDefault();
+  //event handler for submit start point input
+  $(document.body).on("submit", "#mapForm", function (event) {
+    //prevent form from submiting
+    event.preventDefault();
+    // Get lat and lon data attrbutes from the mapForm where we stored the trail info
+    const endLat = $(this).attr('data-lat');
+    const endLon = $(this).attr('data-lon');
 
-      // Get lat and lon data attrbutes from the navigation button
-      const endLat = $(this).attr('data-lat');
-      const endLon = $(this).attr('data-lon');
+    const startAddress = $("#startInput").val().trim();
 
-      const startAddress = $("#startInput").val().trim();
+    //close the modal
+    $('.modal').modal('hide');
+    //Hide the search container
+    $('#trailSearchContainer').hide();
+    //show the map
+    $('#mapContainer').show();
+    //run directions function on click
+    directions(startAddress, endLat, endLon);
+    //clear address?
+    $(this)[0].reset();
 
-      //close the modal
-      $('.modal').modal('hide');
-      //Hide the search container
-      $('#trailSearchContainer').hide();
-      //show the map
-      $('#mapContainer').show();
-      directions(startAddress, endLat, endLon);
-      $("#startInput").val('')
+  });
 
-    });
-  };
 
   //event handler for submit city input
-  // $("#submit-button").on("submit", function (event) {
   $("#hike-form").on("submit", function (event) {
     //prevent form from submiting
     event.preventDefault();
@@ -220,7 +232,7 @@ $(document).ready(function () {
     let cityName = $("#city").val().trim()
     //run weather api function with user city input
     searchCityWeather(cityName);
-    //run geocode api function with user city input and search city trails to get lat lon passed
+    //run geocode api function with user city input and search city trails to get lat lon passed, will run searchcitytrails after get lat and lon
     geocode(cityName, searchCityTrails);
     //empty input box after collecting user input
     $("#city").val('')
@@ -231,101 +243,104 @@ $(document).ready(function () {
   $(document.body).on("click", ".trailInfoDiv", function () {
     //take to new screen with full info on trail and link to map
     let myModal = $('.modal');
-    //which ever trail is clicked find its trail data
+    //which ever trail is clicked find its trail data saved earlier on the div
     let currentTrail = $(this).data('trail');
 
     $('#trailModalLabel').text(currentTrail.name);
     $('#trailModalBody').html(`
-    <div role="tabpanel">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active nav-item"><a class="nav-link modalTab" href="#trailTab" aria-controls="trailTab" role="tab" data-toggle="tab">Trail Information</a>
-                        </li>
+<div role="tabpanel">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active nav-item">
+            <a class="nav-link modalTab" href="#trailTab" aria-controls="trailTab" role="tab" data-toggle="tab">Trail Information</a>
+        </li>
 
-                        <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#leaveReviewTab" aria-controls="leaveReviewTab" role="tab" data-toggle="tab">Leave A Review</a>
-                        </li>
+        <li role="presentation" class="nav-item">
+            <a class="nav-link modalTab" href="#leaveReviewTab" aria-controls="leaveReviewTab" role="tab" data-toggle="tab">Leave A Review</a>
+        </li>
 
-                        <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
-                        </li>
+        <li role="presentation" class="nav-item">
+            <a class="nav-link modalTab" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
+        </li>
 
-                        <li role="presentation" class="nav-item"><a class="nav-link modalTab" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Plan Your Trip</a>
-                        </li>
+        <li role="presentation" class="nav-item">
+            <a class="nav-link modalTab" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Plan Your Trip</a>
+        </li>
 
-                    </ul>
+    </ul>
 
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="trailTab">    
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="trailTab">
+            <br/>
+            <p>${currentTrail.summary}</p>
+            <p>Stars: ${currentTrail.stars}</p>
+            <p>Trail Length: ${currentTrail.length} miles</p>
+            <p>Condition Status: ${currentTrail.conditionStatus}</p>
+            <p>Condition Details: ${currentTrail.conditionDetails}</p>
+            <img class="trailImg" src="${currentTrail.imgMedium}">
+        </div>
+        <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
+
+            <div class="col-md-12 ratingsReview">
+                <h4>Rate ${currentTrail.name}</h4>
+                <br/>
+                <div class="form-group">
+                    <select class="form-control" id="starRatingInput">
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="2">2 Stars</option>
+                        <option value="1">1 Stars</option>
+                    </select>
+                </div>
+                <br/>
+                <form id="reviewForm" data-trailId="${currentTrail.id}">
+                    <div class="form-group">
+                        <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
                         <br/>
-                        <p>${currentTrail.summary}</p>
-                        <p>Stars: ${currentTrail.stars}</p>
-                        <p>Trail Length: ${currentTrail.length} miles</p>
-                        <p>Condition Status: ${currentTrail.conditionStatus}</p>
-                        <p>Condition Details: ${currentTrail.conditionDetails}</p>
-                        <img class="trailImg" src="${currentTrail.imgMedium}"></div>
-                        <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
+                        <button type="submit" id="reviewSubmitBtn" class="btn btn-md submit-review">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-                        <div class="col-md-12 ratingsReview">
-                            <h4>Rate ${currentTrail.name}</h4>
-                            <br/>
-                            <div class="form-group">
-                              <select class="form-control" id="starRatingInput">
-                                <option value="5">5 Stars</option>
-                                <option value="5">4 Stars</option>
-                                <option value="5">3 Stars</option>
-                                <option value="5">2 Stars</option>
-                                <option value="5">1 Stars</option>
-                              </select>
-                            </div>
-                            <br/>
-                            <form id="reviewForm">
-                              <div class="form-group">
-                                <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
-                                <br/>
-                                <button type="button" id="reviewSubmitBtn" class="btn btn-md submit-review"
-                                  data-trailId="${currentTrail.id}">Submit</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-
-                        <div role="tabpanel" class="tab-pane" id="readReviewsTab">
-                        <div class="col-md-12 savedRatingsReview">
-                            <h4>Reviews For ${currentTrail.name}</h4>
-                            <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
-                            <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
-                            <br/><br/>
-                            <form>
-                              <div class="form-group">
-                                <p class="savedReviewTitle"></p>
-                                <p id="savedReview"></p>
-                        </div>
-                        </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="navigateTab">
-                        <form>
-                              <div class="form-group">
-                              <br/>
-                              <h5>Get Directions</h5>
-                                <textarea class="form-control" id="startInput" placeholder="Enter Starting Address: street, city, state, zip code" rows="3" required></textarea>
-                                <br/>
-                                <a href="map.html" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn"
-                                  data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}" >Submit</a>
-                              </div>
-                            </form>
-                          </div>
+        <div role="tabpanel" class="tab-pane" id="readReviewsTab">
+            <div class="col-md-12 savedRatingsReview">
+                <h4>Reviews For ${currentTrail.name}</h4>
+                <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
+                <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
+                <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
+                <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
+                <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+                <br/>
+                <br/>
+                    <div class="form-group">
+                        <p class="savedReviewTitle"></p>
+                        <p id="savedReview"></p>
                     </div>
             </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="navigateTab">
+            <form id="mapForm" data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}">
+                <div class="form-group">
+                    <br/>
+                    <h5>Get Directions</h5>
+                    <textarea class="form-control" id="startInput" placeholder="Enter Starting Address: street, city, state, zip code" rows="3"
+                        required></textarea>
+                    <br/>
+                    <button type="submit" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
     `);
     //show modal
     myModal.modal('show');
 
-    //had to move firebase loader inside div click because of modal
+    //had to move firebase loader inside div click because of modal, when open new modal want to listen for reviews for that trail
     // Firebase watcher + initial loader 
     database.ref('trails/' + currentTrail.id).on("child_added", function (snapshot) {
-      // Log everything that's coming out of snapshot
-      console.log(snapshot.val());
+      // retrieve info that was put in to firebase, everytime a review is added generate new div
       const reviewDiv = `
       <div><h4>Rating: ${snapshot.val().dropdownRating}</h4></div>
       <div>${snapshot.val().userReview}</div>`;
@@ -335,16 +350,10 @@ $(document).ready(function () {
     }, function (errorObject) {
       console.log("Errors handled: " + errorObject.code);
     });
-    submitStartCity()
-
   });
 
 
-
-  // <div id="map" style="width: 100%; height: 300px;"></div>
-
-
-  //Hide map div
+  //Hide map div before search
   $('#mapContainer').hide();
 
 
