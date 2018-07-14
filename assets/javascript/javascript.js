@@ -100,14 +100,23 @@ $(document).ready(function () {
           let pTwo = $("<p>").text(summary);
           trailInfoDiv.append(pTwo);
 
+
           let img = currentTrail.imgSmallMed
           let pFive = $("<img class='trailImg'>").attr({ src: img });
-          trailInfoDiv.append(pFive);
+          let pSix = $(`<img src="assets/images/mainimage.jpg" class='trailImg'>`)
+
+          if (img === "") {
+            trailInfoDiv.append(pSix);
+          } else {
+            trailInfoDiv.append(pFive);
+          }
 
           // Store current trail data in the trailInfoDiv
           trailInfoDiv.data('trail', currentTrail);
 
           trailInfo.append(trailInfoDiv);
+
+
         }
       });
   }
@@ -269,10 +278,10 @@ $(document).ready(function () {
                             <div class="form-group">
                               <select class="form-control" id="starRatingInput">
                                 <option value="5">5 Stars</option>
-                                <option value="5">4 Stars</option>
-                                <option value="5">3 Stars</option>
-                                <option value="5">2 Stars</option>
-                                <option value="5">1 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="2">2 Stars</option>
+                                <option value="1">1 Stars</option>
                               </select>
                             </div>
                             <br/>
