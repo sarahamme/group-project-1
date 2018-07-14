@@ -1,18 +1,62 @@
 body {
     overflow-x: hidden;
 }
-
-.navbar-brand {
-    font-size: 50px;
-    font-family: 'Amatic SC', cursive;
-    margin-left: 2%;
-    float: right;
+/* start nav bar */
+nav {
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    padding: 10px 100px;
+    box-sizing: border-box;
+    transition: .3s;
+    z-index: 100;
 }
 
-.menuItems {
+nav.black {
+    background: rgba(255, 208, 75, 0.9);
+    height: 100px;
+    padding: 10px 100px;
+}
+
+nav .logo {
+    height: 80px;
     float: left;
+    font-size: 24px;
+    transition: .3s;
+    font-size: 60px;
+    font-family: 'Amatic SC', cursive;
+       margin-left: 2%;
+    color: #151515;
 }
-
+nav.black .logo{
+       color: #fff;
+    }
+nav ul {
+    list-style: none;
+    float: right;
+    margin: 0;
+    padding: 0;
+    display: flex;
+     }
+nav ul li {
+    list-style: none;
+}
+nav ul li a {
+    line-height: 80px;
+    color: #151515;
+    padding: 12px 30px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: .3s;
+}
+nav.black ul li a{
+    color: #fff;
+    }
+ nav ul li a:focus{
+    outline: none;
+         }
 .nav-link{
     font-size: 30px;
 }
@@ -20,6 +64,12 @@ body {
     background-color: #FFD04B;
     color: white;
 }
+nav ul li a.active{
+    background: #FFD04B;
+    color: #fff;
+    border-radius: 6px;
+     }
+/* end nav bar */
 
 h1 {
     font-size: 48px;
@@ -55,14 +105,19 @@ h1 {
 
 .weather{
     margin-top: 5%;
+    font-family: 'Amatic SC', cursive;
+    white-space: nowrap;
+  
 }
-
 .city {
     text-align: center;
+
 }
+
 
 .weatherDetails {
    text-align: center;
+   color: #a1a8b3;
 }
 
 .trailInfoDiv{
@@ -96,24 +151,201 @@ h1 {
    -webkit-text-stroke-width: 2px;
    -webkit-text-stroke-color: #FFD04B;
    line-height: 200%;
-   cursor: pointer;
 }
 
-.fa-star:hover {
+.filledStar {
     color: #FFD04B;
 }
+
 
 .submit-review {
     background-color: #FFD04B;
     color: white;
     border: #ffffff;
 }
+/* start about page  */
 .about-photo{
     width: 370px;
     height: 470px;
+    display: block;
+    width: 90%;
+    height: 90%;
     border-radius: 2%;
-}
+     }
+.overlay{
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background-color: rgba(255, 208, 75, 0.2);
+   overflow: hidden;
+   width: 0;
+   height: 100%;
+   transition: .5s ease;
+   border-radius: 2%;
+        }
+.text {
+   color: white;
+   font-size: 20px;
+   position: absolute;
+   top: 50%;
+   left: 30%;
+   transform: translate(-50%, -50%);
+   -ms-transform: translate(-50%, -50%);
+   white-space: nowrap;
+ }
+.something-else{
+   position: relative;
+   width: 50%;
+        }
+.something-else:hover .overlay {
+   width: 100%;
+ }
+ #explore-link{
+     color: white;
+     font-family: 'Amatic SC', cursive;
+     font-size: 60px;
+
+ }
+ .wind{
+     size: 20px;
+ }
+
 .leaflet-control-mapquest-narrative{
     max-height: 400px !important;
 
+}
+/* end about page */
+/* Log in page  */
+.backgroundphoto{
+    background:url("../images/login.jpg");
+    background-attachment: fixed;
+    background-position: center; 
+    background-size: cover;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Exo:100,200,400);
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:700,400,300);
+        
+        .grad{
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -40px;
+            bottom: -40px;
+            width: auto;
+            height: auto;
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65))); /* Chrome,Safari4+ */
+            z-index: 1;
+            opacity: 0.7;
+        }
+        
+        .header{
+            position: absolute;
+            top: calc(50% - 50px);
+            left: calc(50% - 280px);
+            z-index: 2;
+        }
+        
+        .header div{
+            float: left;
+            color: #fff;
+            font-family: 'Exo', sans-serif;
+            font-size: 35px;
+            font-weight: 200;
+        }
+        
+        .header div span{
+            color: #FFD04B !important;
+        }
+        
+        .login{
+            position: absolute;
+            top: calc(50% - 75px);
+            left: calc(50% - 50px);
+            height: 150px;
+            width: 350px;
+            padding: 10px;
+            z-index: 1;
+        }
+        
+        .login input[type=text]{
+            width: 250px;
+            height: 30px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 2px;
+            color: #fff;
+            font-family: 'Exo', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 4px;
+        }
+        
+        .login input[type=password]{
+            width: 250px;
+            height: 30px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 2px;
+            color: #fff;
+            font-family: 'Exo', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 4px;
+            margin-top: 10px;
+        }
+        
+        .login input[type=button]{
+            width: 260px;
+            height: 35px;
+            background: #fff;
+            border: 1px solid #fff;
+            cursor: pointer;
+            border-radius: 2px;
+            color: #a18d6c;
+            font-family: 'Exo', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 6px;
+            margin-top: 10px;
+        }
+        
+        .login input[type=button]:hover{
+            opacity: 0.8;
+        }
+        
+        .login input[type=button]:active{
+            opacity: 0.6;
+        }
+        
+        .login input[type=text]:focus{
+            outline: none;
+            border: 1px solid rgba(255,255,255,0.9);
+        }
+        
+        .login input[type=password]:focus{
+            outline: none;
+            border: 1px solid rgba(255,255,255,0.9);
+        }
+        
+        .login input[type=button]:focus{
+            outline: none;
+        }
+        
+        ::-webkit-input-placeholder{
+           color: rgba(255,255,255,0.6);
+        }
+        
+        ::-moz-input-placeholder{
+           color: rgba(255,255,255,0.6);
+        }
+}
+
+.trailNames {
+    padding-top: 20px;
+}
+
+.leaflet-control-mapquest-narrative{
+    max-height: 400px !important;
 }
