@@ -96,12 +96,12 @@ h1 {
    -webkit-text-stroke-width: 2px;
    -webkit-text-stroke-color: #FFD04B;
    line-height: 200%;
-   cursor: pointer;
 }
 
-.fa-star:hover {
+.filledStar {
     color: #FFD04B;
 }
+
 
 .submit-review {
     background-color: #FFD04B;
@@ -113,7 +113,11 @@ h1 {
     height: 470px;
     border-radius: 2%;
 }
+
+.trailNames {
+    padding-top: 20px;
+}
+
 .leaflet-control-mapquest-narrative{
     max-height: 400px !important;
-
 }
