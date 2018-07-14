@@ -3,14 +3,14 @@
 
 $(document).ready(function () {
 
-// sticky nav bar
-$(window).on('scroll', function (){
-      if($(window).scrollTop()) {
-        $('nav').addClass('black');
-      } else {
-        $('nav').removeClass('black');
-      }
-    });
+  // sticky nav bar
+  $(window).on('scroll', function () {
+    if ($(window).scrollTop()) {
+      $('nav').addClass('black');
+    } else {
+      $('nav').removeClass('black');
+    }
+  });
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyAnkB5LXjeLkSHzKilnnDUwbT3ouMgyP14",
@@ -28,7 +28,7 @@ $(window).on('scroll', function (){
   $(document.body).on("submit", "#reviewForm", function (event) {
     // Don't refresh the page
     event.preventDefault();
-    
+
     // logic for storing and retrieving the reveiw
     let userReview = $("#userReview").val().trim();
 
@@ -112,7 +112,7 @@ $(window).on('scroll', function (){
 
           let img = currentTrail.imgSmallMed
           let pFive = $("<img class='trailImg'>").attr({ src: img });
-          let pSix = $(`<img src="assets/images/mainimage.jpg" class='trailImg'>`)
+          let pSix = $(`<img src="assets/images/NoImageAvailble.jpg" class='trailImg'>`)
 
           if (img === "") {
             trailInfoDiv.append(pSix);
@@ -279,13 +279,19 @@ $(window).on('scroll', function (){
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="trailTab">
-          <br/>
-          <p>${currentTrail.summary}</p>
-          <p>Stars: ${currentTrail.stars}</p>
-          <p>Trail Length: ${currentTrail.length} miles</p>
-          <p>Condition Status: ${currentTrail.conditionStatus}</p>
-          <p>Condition Details: ${currentTrail.conditionDetails}</p>
-          <img class="trailImg" src="${currentTrail.imgMedium}"></div>
+            <br/>
+            <div class="row">
+            <div class="col-md-6">
+            <img class="trailImg" src="${currentTrail.imgMedium ? currentTrail.imgMedium : "assets/images/NoImageAvailble.jpg"}">
+            </div>
+            <div class="col-md-6">
+            <p class="tabTrailSummary">${currentTrail.summary}</p>
+            <p class="tabTrailLength"><b>Trail Length:</b> ${currentTrail.length} miles</p>
+            <p class="tabConditionStatus"><b>Condition Status:</b> ${currentTrail.conditionStatus}</p>
+            <p class="tabConditionDetails"><b>Condition Details:</b> ${currentTrail.conditionDetails}</p>
+            </div>
+            </div>
+        </div>
           <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
 
           <div class="col-md-12 ratingsReview">
@@ -358,7 +364,7 @@ $(window).on('scroll', function (){
         <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
         <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
       `;
-      
+
       const starRatingTwo = `
       <div>
         <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
@@ -419,7 +425,7 @@ $(window).on('scroll', function (){
       // // Change the HTML to reflect
       $("#savedReview").append(reviewDiv);
 
-      
+
 
       // Handle the errors
     }, function (errorObject) {
