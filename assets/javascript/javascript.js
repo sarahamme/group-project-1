@@ -145,20 +145,43 @@ $(window).on('scroll', function (){
 
   //function using mapQuest.js no need for ajax call
   function directions(startAddress, endLat, endLon) {
-    $("#mapArea").empty().append(`<div id="map" style="width: 100%; height: 530px;"></div>`);
+    $("#mapArea").empty().append(`<div id="map" style="width: 100%; height: 620px;"></div>`);
     L.mapquest.key = '5WFYsGYGsWMThn7qZ95yH1P1s8Euc6uK';
 
-    let map = L.mapquest.map('map', {
-      center: [endLat, endLon],
-      layers: L.mapquest.tileLayer('hybrid'),
-      zoom: 10,
-    });
+    addDirections();
 
-    L.mapquest.directions().route({
-      start: startAddress,
-      end: [endLat, endLon],
-    });
+    function addDirections() {
+      var directions = L.mapquest.directions();
+      directions.route({
+        start: startAddress,
+        end: [endLat, endLon],
+        options: {
+          enhancedNarrative: true
+        }
+      }, createMap);
+    }
 
+    function createMap(err, response) {
+
+      var map = L.mapquest.map('map', {
+        center: [endLat, endLon],
+        layers: L.mapquest.tileLayer('map'),
+        zoom: 10
+      });
+
+      var directionsLayer = L.mapquest.directionsLayer({
+        directionsResponse: response
+      }).addTo(map);
+
+      var narrativeControl = L.mapquest.narrativeControl({
+        directionsResponse: response,
+        compactResults: false,
+        interactive: true
+      });
+
+      narrativeControl.setDirectionsLayer(directionsLayer);
+      narrativeControl.addTo(map);
+    }
   }
 
   $('#closeMapBtn').on('click', function (event) {

@@ -164,6 +164,7 @@ h1 {
     width: 90%;
     height: 90%;
     border-radius: 2%;
+<<<<<<< HEAD
      }
 .overlay{
    position: absolute;
@@ -203,3 +204,10 @@ h1 {
  .wind{
      size: 20px;
  }
+=======
+}
+.leaflet-control-mapquest-narrative{
+    max-height: 400px !important;
+
+}
+>>>>>>> c440b6bab2f89c3f38ed696086a2bcc5f8bfeb9f
