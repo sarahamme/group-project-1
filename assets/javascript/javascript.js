@@ -24,15 +24,15 @@ $(window).on('scroll', function (){
 
   let database = firebase.database();
 
-
   // Capture Button Click review submit btn
   $(document.body).on("submit", "#reviewForm", function (event) {
     // Don't refresh the page
     event.preventDefault();
+    
     // logic for storing and retrieving the reveiw
     let userReview = $("#userReview").val().trim();
 
-    //
+    //define dropdown rating input. 
     let dropdownRating = $('#starRatingInput').val()
     //get the trail data from the reviewForm attribute through the hike api and .data
     const trailId = $(this).attr('data-trailId');
@@ -279,69 +279,64 @@ $(window).on('scroll', function (){
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="trailTab">
-            <br/>
-            <p>${currentTrail.summary}</p>
-            <p>Stars: ${currentTrail.stars}</p>
-            <p>Trail Length: ${currentTrail.length} miles</p>
-            <p>Condition Status: ${currentTrail.conditionStatus}</p>
-            <p>Condition Details: ${currentTrail.conditionDetails}</p>
-            <img class="trailImg" src="${currentTrail.imgMedium}">
-        </div>
-        <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
+          <br/>
+          <p>${currentTrail.summary}</p>
+          <p>Stars: ${currentTrail.stars}</p>
+          <p>Trail Length: ${currentTrail.length} miles</p>
+          <p>Condition Status: ${currentTrail.conditionStatus}</p>
+          <p>Condition Details: ${currentTrail.conditionDetails}</p>
+          <img class="trailImg" src="${currentTrail.imgMedium}"></div>
+          <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
 
-            <div class="col-md-12 ratingsReview">
-                <h4>Rate ${currentTrail.name}</h4>
-                <br/>
+          <div class="col-md-12 ratingsReview">
+              <h4 class="trailNames">Rate ${currentTrail.name}</h4>
+              <br/>
+              <div class="form-group">
+                <select class="form-control" id="starRatingInput">
+                  <option value="5">5 Stars</option>
+                  <option value="4">4 Stars</option>
+                  <option value="3">3 Stars</option>
+                  <option value="2">2 Stars</option>
+                  <option value="1">1 Star</option>
+                </select>
+              </div>
+              <br/>
+              <form id="reviewForm" data-trailID="${currentTrail.id}">
                 <div class="form-group">
-                    <select class="form-control" id="starRatingInput">
-                        <option value="5">5 Stars</option>
-                        <option value="4">4 Stars</option>
-                        <option value="3">3 Stars</option>
-                        <option value="2">2 Stars</option>
-                        <option value="1">1 Stars</option>
-                    </select>
+                  <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
+                  <br/>
+                  <button type="submit" id="reviewSubmitBtn" class="btn btn-md submit-review">Submit</button>
                 </div>
-                <br/>
-                <form id="reviewForm" data-trailId="${currentTrail.id}">
-                    <div class="form-group">
-                        <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
-                        <br/>
-                        <button type="submit" id="reviewSubmitBtn" class="btn btn-md submit-review">Submit</button>
-                    </div>
-                </form>
+              </form>
             </div>
-        </div>
+          </div>
 
-        <div role="tabpanel" class="tab-pane" id="readReviewsTab">
+          <div role="tabpanel" class="tab-pane" id="readReviewsTab">
             <div class="col-md-12 savedRatingsReview">
-                <h4>Reviews For ${currentTrail.name}</h4>
-                <i class="fa fa-star fa-lg" data-rating="1" aria-hidden="true"></i>
-                <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
-                <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
-                <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
-                <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
-                <br/>
-                <br/>
-                    <div class="form-group">
-                        <p class="savedReviewTitle"></p>
-                        <p id="savedReview"></p>
-                    </div>
-            </div>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="navigateTab">
-            <form id="mapForm" data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}">
+              <h4 class="trailNames">Reviews for ${currentTrail.name}</h4>
+              <form>
                 <div class="form-group">
-                    <br/>
-                    <h5>Get Directions</h5>
-                    <textarea class="form-control" id="startInput" placeholder="Enter Starting Address: street, city, state, zip code" rows="3"
-                        required></textarea>
-                    <br/>
-                    <button type="submit" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn">Submit</button>
+                  <div id="savedReview"></div>
                 </div>
-            </form>
-        </div>
+              </form>
+            </div>
+          </div>
+
+          <div role="tabpanel" class="tab-pane" id="navigateTab">
+          <form id="mapForm" data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}">
+                <div class="form-group">
+                <br/>
+                <h5>Get Directions</h5>
+                  <textarea class="form-control" id="startInput" placeholder="Enter Starting Address: street, city, state, zip code" rows="3" required></textarea>
+                  <br/>
+                  <button type="submit" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn">Submit</button>
+                </div>
+              </form>
+            </div>
+      </div>
     </div>
-</div>
+  </div>
+        
     `);
     //show modal
     myModal.modal('show');
@@ -351,10 +346,81 @@ $(window).on('scroll', function (){
     database.ref('trails/' + currentTrail.id).on("child_added", function (snapshot) {
       // retrieve info that was put in to firebase, everytime a review is added generate new div
       const reviewDiv = `
-      <div><h4>Rating: ${snapshot.val().dropdownRating}</h4></div>
-      <div>${snapshot.val().userReview}</div>`;
+      <div>${snapshot.val().userReview}</div>
+      `;
+      console.log("review div: " + reviewDiv);
+
+      //Create variables to display star ratings 
+      const starRatingOne = `
+        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+      `;
+      
+      const starRatingTwo = `
+      <div>
+        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+      </div>
+      `;
+
+      const starRatingThree = `
+      <div>
+        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="3" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+      </div>
+      `;
+
+      const starRatingFour = `
+      <div>
+        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="3" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="4" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+      </div>
+      `;
+
+      const starRatingFive = `
+      <div>
+        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="3" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="4" aria-hidden="true"></i>
+        <i class="fa fa-star fa-lg filledStar" data-rating="5" aria-hidden="true"></i>
+      </div>
+      `;
+
+      //If, Else If statement to append stars based on dropdownRating value
+      if (snapshot.val().dropdownRating == 1) {
+        $("#savedReview").append(starRatingOne);
+
+      } else if (snapshot.val().dropdownRating == 2) {
+        $("#savedReview").append(starRatingTwo);
+
+      } else if (snapshot.val().dropdownRating == 3) {
+        $("#savedReview").append(starRatingThree);
+
+      } else if (snapshot.val().dropdownRating == 4) {
+        $("#savedReview").append(starRatingFour);
+
+      } else if (snapshot.val().dropdownRating == 5) {
+        $("#savedReview").append(starRatingFive);
+      }
+
       // // Change the HTML to reflect
       $("#savedReview").append(reviewDiv);
+
+      
+
       // Handle the errors
     }, function (errorObject) {
       console.log("Errors handled: " + errorObject.code);
