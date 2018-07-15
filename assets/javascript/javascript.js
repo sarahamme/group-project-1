@@ -1,6 +1,3 @@
-
-
-
 $(document).ready(function () {
 
   // sticky nav bar
@@ -11,6 +8,7 @@ $(document).ready(function () {
       $('nav').removeClass('black');
     }
   });
+
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyAnkB5LXjeLkSHzKilnnDUwbT3ouMgyP14",
@@ -34,8 +32,10 @@ $(document).ready(function () {
 
     //define dropdown rating input. 
     let dropdownRating = $('#starRatingInput').val()
+    
     //get the trail data from the reviewForm attribute through the hike api and .data
     const trailId = $(this).attr('data-trailId');
+
     //add trails so that ID and user review will be children of trails put info in to firebase
     database.ref('trails/' + trailId).push({
       // key value pairs on firebase object
@@ -74,8 +74,8 @@ $(document).ready(function () {
         $(".city").html("<h1>" + response.name + " Weather Details</h1>");
         // $(".wind").text("Summary: " + response.weather[0].description);
         $(".humidity").html("<h3>" + "Humidity: " + response.main.humidity + "%" + "</h3>");
-        $(".temp").html("<h3>" + "Temperature (F) " + fTempRound + "</h3>");
-        $(".wind").html("<h3>" + "Summary: " + "<img src='http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'>" + "</h3>");
+        $(".temp").html("<h3>" + "Temperature: " + fTempRound + "° F</h3>");
+        $(".wind").html("<h3>" + "Current Conditions: " + "<img src='http://openweathermap.org/img/w/" + response.weather[0].icon + ".png'>" + "</h3>");
       });
   };
 
@@ -257,186 +257,181 @@ $(document).ready(function () {
 
     $('#trailModalLabel').text(currentTrail.name);
     $('#trailModalBody').html(`
-<div role="tabpanel">
-    <ul class="nav nav-tabs" role="tablist">
+    <div role="tabpanel">
+      <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active nav-item">
-            <a class="nav-link modalTab" href="#trailTab" aria-controls="trailTab" role="tab" data-toggle="tab">Trail Information</a>
+          <a class="nav-link modalTab" href="#trailTab" aria-controls="trailTab" role="tab" data-toggle="tab">Trail Information</a>
         </li>
 
         <li role="presentation" class="nav-item">
-            <a class="nav-link modalTab" href="#leaveReviewTab" aria-controls="leaveReviewTab" role="tab" data-toggle="tab">Leave A Review</a>
+          <a class="nav-link modalTab" href="#leaveReviewTab" aria-controls="leaveReviewTab" role="tab" data-toggle="tab">Leave A Review</a>
         </li>
 
         <li role="presentation" class="nav-item">
-            <a class="nav-link modalTab" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
+          <a class="nav-link modalTab" href="#readReviewsTab" aria-controls="readReviewsTab" role="tab" data-toggle="tab">Read Reviews</a>
         </li>
 
         <li role="presentation" class="nav-item">
-            <a class="nav-link modalTab" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Plan Your Trip</a>
+          <a class="nav-link modalTab" href="#navigateTab" aria-controls="navigateTab" role="tab" data-toggle="tab">Plan Your Trip</a>
         </li>
+      </ul>
 
-    </ul>
-
-    <div class="tab-content">
+      <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="trailTab">
-            <br/>
-            <div class="row">
-            <div class="col-md-6">
-            <img class="trailImg" src="${currentTrail.imgMedium ? currentTrail.imgMedium : "assets/images/NoImageAvailble.jpg"}">
+          <br/>
+          <div class="row">
+            <div class="col-md-5">
+              <img class="trailImg" src="${currentTrail.imgMedium ? currentTrail.imgMedium : "assets/images/NoImageAvailble.jpg"}">
             </div>
-            <div class="col-md-6">
-            <p class="tabTrailSummary">${currentTrail.summary}</p>
-            <p class="tabTrailLength"><b>Trail Length:</b> ${currentTrail.length} miles</p>
-            <p class="tabConditionStatus"><b>Condition Status:</b> ${currentTrail.conditionStatus}</p>
-            <p class="tabConditionDetails"><b>Condition Details:</b> ${currentTrail.conditionDetails}</p>
+            <div class="col-md-7">
+              <p class="tabTrailSummary">${currentTrail.summary}</p>
+              <p class="tabTrailLength"><b>Trail Length:</b> ${currentTrail.length} miles</p>
+              <p class="tabConditionStatus"><b>Condition Status:</b> ${currentTrail.conditionStatus}</p>
+              <p class="tabConditionDetails"><b>Condition Details:</b> ${currentTrail.conditionDetails}</p>
             </div>
-            </div>
+          </div>
         </div>
-          <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
-
+    
+        <div role="tabpanel" class="tab-pane" id="leaveReviewTab">
           <div class="col-md-12 ratingsReview">
-              <h4 class="trailNames">Rate ${currentTrail.name}</h4>
-              <br/>
+            <h4 class="trailNames">Rate ${currentTrail.name}</h4>
+            <br/>
+            <div class="form-group">
+              <select class="form-control" id="starRatingInput">
+                <option value="5">5 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="2">2 Stars</option>
+                <option value="1">1 Star</option>
+              </select>
+            </div>
+            <br/>
+            <form id="reviewForm" data-trailID="${currentTrail.id}">
               <div class="form-group">
-                <select class="form-control" id="starRatingInput">
-                  <option value="5">5 Stars</option>
-                  <option value="4">4 Stars</option>
-                  <option value="3">3 Stars</option>
-                  <option value="2">2 Stars</option>
-                  <option value="1">1 Star</option>
-                </select>
-              </div>
-              <br/>
-              <form id="reviewForm" data-trailID="${currentTrail.id}">
-                <div class="form-group">
-                  <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
-                  <br/>
-                  <button type="submit" id="reviewSubmitBtn" class="btn btn-md submit-review">Submit</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <div role="tabpanel" class="tab-pane" id="readReviewsTab">
-            <div class="col-md-12 savedRatingsReview">
-              <h4 class="trailNames">Reviews for ${currentTrail.name}</h4>
-              <form>
-                <div class="form-group">
-                  <div id="savedReview"></div>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <div role="tabpanel" class="tab-pane" id="navigateTab">
-          <form id="mapForm" data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}">
-                <div class="form-group">
+                <textarea class="form-control" id="userReview" placeholder="Share your thoughts on ${currentTrail.name}..." rows="3" required></textarea>
                 <br/>
-                <h5>Get Directions</h5>
-                  <textarea class="form-control" id="startInput" placeholder="Enter Starting Address: street, city, state, zip code" rows="3" required></textarea>
-                  <br/>
-                  <button type="submit" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn">Submit</button>
-                </div>
-              </form>
+                <button type="submit" id="reviewSubmitBtn" class="btn btn-md submit-review">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="readReviewsTab">
+          <div class="col-md-12 savedRatingsReview">
+            <h4 class="trailNames">Reviews for ${currentTrail.name}</h4>
+            <form>
+              <div class="form-group">
+                <div id="savedReview"></div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="navigateTab">
+          <form id="mapForm" data-lat="${currentTrail.latitude}" data-lon="${currentTrail.longitude}">
+            <div class="form-group">
+              <br/>
+              <h5>Get Directions</h5>
+              <textarea class="form-control" id="startInput" placeholder="Enter Starting Address: street, city, state, zip code" rows="3" required></textarea>
+              <br/>
+              <button type="submit" class="btn btn-md submit-review" role="button" id="directionsSubmitBtn">Submit</button>
             </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-        
     `);
-    //show modal
-    myModal.modal('show');
 
-    //had to move firebase loader inside div click because of modal, when open new modal want to listen for reviews for that trail
-    // Firebase watcher + initial loader 
-    database.ref('trails/' + currentTrail.id).on("child_added", function (snapshot) {
-      // retrieve info that was put in to firebase, everytime a review is added generate new div
-      const reviewDiv = `
-      <div>${snapshot.val().userReview}</div>
-      `;
-      console.log("review div: " + reviewDiv);
+  //show modal
+  myModal.modal('show');
 
-      //Create variables to display star ratings 
-      const starRatingOne = `
-        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
-      `;
+  //had to move firebase loader inside div click because of modal, when open new modal want to listen for reviews for that trail
+  // Firebase watcher + initial loader 
+  database.ref('trails/' + currentTrail.id).on("child_added", function (snapshot) {
+    // retrieve info that was put in to firebase, everytime a review is added generate new div
+    const reviewDiv = `
+    <div>${snapshot.val().userReview}</div>
+    `;
+    console.log("review div: " + reviewDiv);
 
-      const starRatingTwo = `
-      <div>
-        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
-      </div>
-      `;
+    //Create variables to display star ratings 
+    const starRatingOne = `
+      <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="2" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+    `;
 
-      const starRatingThree = `
-      <div>
-        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="3" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
-      </div>
-      `;
+    const starRatingTwo = `
+    <div>
+      <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="3" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+    </div>
+    `;
 
-      const starRatingFour = `
-      <div>
-        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="3" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="4" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
-      </div>
-      `;
+    const starRatingThree = `
+    <div>
+      <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="3" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="4" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+    </div>
+    `;
 
-      const starRatingFive = `
-      <div>
-        <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="3" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="4" aria-hidden="true"></i>
-        <i class="fa fa-star fa-lg filledStar" data-rating="5" aria-hidden="true"></i>
-      </div>
-      `;
+    const starRatingFour = `
+    <div>
+      <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="3" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="4" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg" data-rating="5" aria-hidden="true"></i>
+    </div>
+    `;
 
-      //If, Else If statement to append stars based on dropdownRating value
-      if (snapshot.val().dropdownRating == 1) {
-        $("#savedReview").append(starRatingOne);
+    const starRatingFive = `
+    <div>
+      <i class="fa fa-star fa-lg filledStar" data-rating="1" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="2" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="3" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="4" aria-hidden="true"></i>
+      <i class="fa fa-star fa-lg filledStar" data-rating="5" aria-hidden="true"></i>
+    </div>
+    `;
 
-      } else if (snapshot.val().dropdownRating == 2) {
-        $("#savedReview").append(starRatingTwo);
+    //If, Else If statement to append stars based on dropdownRating value
+    if (snapshot.val().dropdownRating == 1) {
+      $("#savedReview").append(starRatingOne);
 
-      } else if (snapshot.val().dropdownRating == 3) {
-        $("#savedReview").append(starRatingThree);
+    } else if (snapshot.val().dropdownRating == 2) {
+      $("#savedReview").append(starRatingTwo);
 
-      } else if (snapshot.val().dropdownRating == 4) {
-        $("#savedReview").append(starRatingFour);
+    } else if (snapshot.val().dropdownRating == 3) {
+      $("#savedReview").append(starRatingThree);
 
-      } else if (snapshot.val().dropdownRating == 5) {
-        $("#savedReview").append(starRatingFive);
-      }
+    } else if (snapshot.val().dropdownRating == 4) {
+      $("#savedReview").append(starRatingFour);
 
-      // // Change the HTML to reflect
-      $("#savedReview").append(reviewDiv);
+    } else if (snapshot.val().dropdownRating == 5) {
+      $("#savedReview").append(starRatingFive);
+    }
 
+    //Change the HTML to reflect
+    $("#savedReview").append(reviewDiv);
 
-
-      // Handle the errors
+    // Handle the errors
     }, function (errorObject) {
       console.log("Errors handled: " + errorObject.code);
     });
   });
 
-
   //Hide map div before search
   $('#mapContainer').hide();
-
 
 });
 
