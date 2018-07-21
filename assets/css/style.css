@@ -16,9 +16,13 @@ nav {
 }
 
 nav.black {
-    background: rgba(255, 208, 75, 0.9);
+    background: rgba(255, 208, 75);
     height: 100px;
     padding: 10px 100px;
+}
+
+nav.black .active{
+    background-color: #bbbec1;
 }
 
 nav .logo {
